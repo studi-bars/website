@@ -29,7 +29,7 @@
                                 ab {{ bar.start_time }}
                                 {% if bar.end_time %} bis ca {{ bar.end_time }}{% endif %}
                                 <br>
-                                <a class="fg-white" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
+                                <a class="fg-white" target="_blank" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
                             </p>
 
                         </div>
@@ -64,18 +64,18 @@
                                     ab {{ bar.start_time }}
                                 </p>
                                 <p class="card-text">
-                                    <a href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
+                                    <a target="_blank" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
                                 </p>
                                 <p>
                                     {% if bar.website %}
-                                        <a href="{{ bar.website }}" class="card-link">Website</a>
+                                        <a target="_blank" href="{{ bar.website }}" class="card-link">Website</a>
                                     {% endif %}
                                     {% if bar.menu_url %}
-                                        <a href="{{ bar.menu_url }}" class="card-link">Karte</a>
+                                        <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Karte</a>
                                     {% endif %}
                                 </p>
                                 {% if bar.instagram_id %}
-                                    <a href="https://www.instagram.com/{{ bar.instagram_id }}" class="btn btn-primary">Instagram</a>
+                                    <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}" class="btn btn-primary">Instagram</a>
                                 {% endif %}
 
                             </div>
