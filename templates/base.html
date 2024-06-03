@@ -1,0 +1,56 @@
+{% load static %}
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Studi-Bars Aachen - {{ title }}</title>
+    {% bootstrap_css %}
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand d-md-none" href="#">Studi Bars Aachen</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-md-center" id="navbarCollapse">
+            <a class="navbar-brand d-md-block d-none">Studi Bars Aachen</a>
+            <ul class="navbar-nav mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#die-bars">Die Bars</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Events</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container pt-5 col-xl-8 col-md-10 col-sm-12">
+    <div class="row p-3">
+        <div class="col-12">
+            {% bootstrap_messages %}
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% bootstrap_javascript %}
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="p-3 mb-4 bg-body-tertiary rounded-3">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold">Studi Bars Aachen</h1>
+            <p class="col-xl-10 fs-4">
+                Wir sind Bars die von Studierenden in den Wohnheimen betrieben werden.
+                Bei uns gibt es Bier, Shots und Cocktails zu günstigen Preisen.
+                Jede Bar hat an einem Tag in der Woche geöffnet.
+            </p>
+        </div>
+    </div>
+    <div class="row mb-5">
+        {% for day in bars %}
+            <div class="col-12 col-sm-6 col-lg-3">
+                <h3 class="border-bottom pb-1 mb-3">{{ day.0 }}</h3>
+                {% for bar in day.1 %}
+                    <div class="card  mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ bar.name }}</h5>
+                            <p class="card-text">
+                                {% if bar.open == 1 %}
+                                    Wöchentlich
+                                {% else %}
+                                    Jeden 1./3./5. {{ day.0 }}
+                                {% endif %}
+                                ab {{ bar.start_time }}
+                                {% if bar.end_time %} bis ca {{ bar.end_time }}{% endif %}
+                                <br>
+                                <a class="fg-white" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
+                            </p>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <h1 class="border-bottom" id="die-bars">Die Bars</h1>
+    <div class="d-flex overflow-auto flex-nowrap mb-5">
+        {% for day in bars %}
+            <div class="me-2">
+                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ day.0 }}</h3>
+
+                <div class="d-flex flex-nowrap">
+                    {% for bar in day.1 %}
+                        <div class="card me-2" style="width: 20rem">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#868e96"></rect>
+                                <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
+                            </svg>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ bar.name }}</h5>
+                                <p class="card-text">
+                                    {% if bar.open == 1 %}
+                                        Wöchentlich
+                                    {% else %}
+                                        Jeden 1./3./5. {{ day.0 }}
+                                    {% endif %}
+                                    ab {{ bar.start_time }}
+                                </p>
+                                <p class="card-text">
+                                    <a href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
+                                </p>
+                                <p>
+                                    {% if bar.website %}
+                                        <a href="{{ bar.website }}" class="card-link">Website</a>
+                                    {% endif %}
+                                    {% if bar.menu_url %}
+                                        <a href="{{ bar.menu_url }}" class="card-link">Karte</a>
+                                    {% endif %}
+                                </p>
+                                {% if bar.instagram_id %}
+                                    <a href="https://www.instagram.com/{{ bar.instagram_id }}" class="btn btn-primary">Instagram</a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
