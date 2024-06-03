@@ -25,8 +25,10 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'studi-bars.de', '192.168.2.67']
-CSRF_TRUSTED_ORIGINS = ["https://studi-bars.de", "https://studi-bars.hilton.rwth-aachen.de"]
+DNS_POSTFIXES = ["", "-ac", "-aachen"]
+
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost'] + [f"{prefix}studibars{postfix}.de" for prefix in ["", "www."] for postfix in DNS_POSTFIXES]
+CSRF_TRUSTED_ORIGINS = [f"https://{prefix}studibars{postfix}.de" for prefix in ["", "www."] for postfix in DNS_POSTFIXES]
 
 # Application definition
 
