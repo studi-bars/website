@@ -35,7 +35,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/uploads
     ports:
-      - 1337:80
+      - 8003:80
     depends_on:
       - web
 
