@@ -20,7 +20,7 @@
                     <div class="card  mb-3 ">
                         <div class="card-body">
                             <h5 class="card-title">{{ bar.name }}</h5>
-                            <p class="card-text">
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
                                 {% if bar.open == 1 %}
                                     Wöchentlich
                                 {% else %}
@@ -28,7 +28,8 @@
                                 {% endif %}
                                 ab {{ bar.start_time }}
                                 {% if bar.end_time %} bis ca {{ bar.end_time }}{% endif %}
-                                <br>
+                            </h6>
+                            <p class="card-text">
                                 <a class="fg-white" target="_blank" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
                             </p>
 
