@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/studi-bars/studi-bars/django-app:main
+    image: ghcr.io/studi-bars/website/django-app:main
     build:
       context: .
     volumes:
@@ -29,7 +29,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   nginx:
-    image: ghcr.io/studi-bars/studi-bars/nginx:main
+    image: ghcr.io/studi-bars/website/nginx:main
     build: ./nginx
     volumes:
       - static_volume:/app/staticfiles
