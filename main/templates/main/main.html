@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="row mb-5">
-        {% for day in bars %}
+        {% for day in bars_by_day %}
             <div class="col-12 col-sm-6 col-lg-3">
                 <h3 class="border-bottom pb-1 mb-3">{{ day.0 }}</h3>
                 {% for bar in day.1 %}
@@ -30,7 +30,8 @@
                                 {% if bar.end_time %} bis ca {{ bar.end_time }}{% endif %}
                             </h6>
                             <p class="card-text">
-                                <a class="fg-white" target="_blank" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
+                                <a class="fg-white" target="_blank"
+                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
                             </p>
 
                         </div>
@@ -41,47 +42,52 @@
     </div>
     <h1 class="border-bottom" id="die-bars">Die Bars</h1>
     <div class="d-flex overflow-auto flex-nowrap mb-5">
-        {% for day in bars %}
+        {% for bar in bars %}
             <div class="me-2">
-                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ day.0 }}</h3>
+                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ bar.name }}</h3>
 
                 <div class="d-flex flex-nowrap">
-                    {% for bar in day.1 %}
+                    {% comment %}{% for bar in day.1 %}{% endcomment %}
                         <div class="card me-2" style="width: 20rem">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#868e96"></rect>
-                                <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
-                            </svg>
+                            {% if not bar.image %}
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
+                                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
+                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#868e96"></rect>
+                                    <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
+                                </svg>
+                            {% else %}
+                                <img src="{{ bar.image.url }}" class="card-img-top" height="180px">
+                            {% endif %}
                             <div class="card-body">
-                                <h5 class="card-title">{{ bar.name }}</h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary">
+                                <h6 class="card-title">
                                     {% if bar.open == 1 %}
-                                        Wöchentlich
+                                        Jeden {{ bar.get_day_display }}
                                     {% else %}
-                                        Jeden 1./3./5. {{ day.0 }}
+                                        Jeden 1./3./5. {{ bar.get_day_display }}
                                     {% endif %}
                                     ab {{ bar.start_time }}
                                 </h6>
                                 <p class="card-text">
-                                    <a target="_blank" href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
+                                    <a target="_blank"
+                                       href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
                                 </p>
                                 <p>
                                     {% if bar.website %}
                                         <a target="_blank" href="{{ bar.website }}" class="card-link">Website</a>
                                     {% endif %}
                                     {% if bar.menu_url %}
-                                        <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Karte</a>
+                                        <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Getränke Karte</a>
                                     {% endif %}
                                 </p>
                                 {% if bar.instagram_id %}
-                                    <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}" class="btn btn-primary">Instagram</a>
+                                    <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
+                                       class="btn btn-primary">Instagram</a>
                                 {% endif %}
 
                             </div>
                         </div>
-                    {% endfor %}
+                    {% comment %}{% endfor %}{% endcomment %}
                 </div>
             </div>
         {% endfor %}

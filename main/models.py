@@ -2,38 +2,27 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class WeekdayField(models.IntegerField):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    THURSDAY = 4
-    FRIDAY = 5
-    SATURDAY = 6
-    SUNDAY = 7
+class Weekday(models.IntegerChoices):
+    MONDAY = 1, 'Montag'
+    TUESDAY = 2, 'Dienstag'
+    WEDNESDAY = 3, 'Mittwoch'
+    THURSDAY = 4, 'Donnerstag'
+    FRIDAY = 5, 'Freitag'
+    SATURDAY = 6, 'Samstag'
+    SUNDAY = 7, 'Sonntag'
 
-    WEEKDAY_CHOICES = (
-        (MONDAY, 'Montag'),
-        (TUESDAY, 'Dienstag'),
-        (WEDNESDAY, 'Mittwoch'),
-        (THURSDAY, 'Donnerstag'),
-        (FRIDAY, 'Freitag'),
-        (SATURDAY, 'Samstag'),
-        (SUNDAY, 'Sonntag'),
-    )
+
+class WeekdayField(models.IntegerField):
 
     def __init__(self, *args, **kwargs):
-        kwargs['choices'] = self.WEEKDAY_CHOICES
+        kwargs['choices'] = Weekday
         super(WeekdayField, self).__init__(*args, **kwargs)
 
 
 class Bar(models.Model):
-    OPEN_WEEKLY = 1
-    OPEN_135 = 2
-
-    OPEN_CHOICES = (
-        (OPEN_WEEKLY, 'Weekly'),
-        (OPEN_135, '1./3./5.'),
-    )
+    class OpenModel(models.IntegerChoices):
+        WEEKLY = 1, 'Weekly'
+        OPEN_135 = 2, '1./3./5.'
 
     name = models.CharField(unique=True, max_length=254)
     description = models.TextField(null=True, blank=True)
@@ -43,8 +32,8 @@ class Bar(models.Model):
     day = WeekdayField()
     start_time = models.TimeField(default='21:00')
     end_time = models.TimeField(null=True, blank=True, help_text="Ungefähres Ende")
-    open = models.IntegerField(choices=OPEN_CHOICES, help_text="Sowas wie jede Woche, 1./3./5. Mittwoch",
-                               default=OPEN_WEEKLY)
+    open = models.IntegerField(choices=OpenModel, help_text="Sowas wie jede Woche, 1./3./5. Mittwoch",
+                               default=OpenModel.WEEKLY)
     image = models.ImageField(upload_to="bars/", blank=True, null=True)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=6)
