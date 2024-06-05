@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import formats
 
 
 class Weekday(models.IntegerChoices):
@@ -49,6 +50,15 @@ class Bar(models.Model):
         if len(self.tags) > 0:
             return self.tags.split(',')
         return []
+
+    def open_text(self):
+        text = "Jeden "
+        if self.open == self.OpenModel.OPEN_135:
+            text += f"{self.OpenModel.OPEN_135.label} "
+        text += f"{self.get_day_display()} ab {formats.localize(self.start_time)}"
+        if self.end_time is not None:
+            text += f" bis ca. {formats.localize(self.end_time)}"
+        return text
 
 
 class Event(models.Model):
