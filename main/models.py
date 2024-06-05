@@ -23,7 +23,7 @@ class WeekdayField(models.IntegerField):
 class Bar(models.Model):
     class OpenModel(models.IntegerChoices):
         WEEKLY = 1, 'Weekly'
-        OPEN_135 = 2, '1./3./5.'
+        OPEN_135 = 2, '1. 3. 5.'
 
     name = models.CharField(unique=True, max_length=254)
     description = models.TextField(null=True, blank=True)
