@@ -27,9 +27,11 @@ class BarViewSet(viewsets.ModelViewSet):
     queryset = Bar.objects.all()
     serializer_class = BarSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filterset_fields = ['name', 'description', 'day', 'start_time', 'end_time', 'open', 'tags']
 
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filterset_fields = ['name', 'description', 'bar', 'start_date', 'end_date']
