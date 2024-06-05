@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# Collect static files first, so that they are available by nginx
+python manage.py collectstatic --noinput
+
 if [ "$DATABASE" = "postgres" ]
 then
     echo "Waiting for postgres..."
