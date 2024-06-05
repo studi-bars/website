@@ -4,6 +4,7 @@ config.py
 
 # ignore media files
 uploads
+staticfiles
 
 # ignore env files
 .env.prod
