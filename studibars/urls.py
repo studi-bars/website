@@ -17,11 +17,18 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, include
+from rest_framework import routers
 
-from main import views as main_views, urls as main_urls
+from main import views as main_views, urls as main_urls, views
 from studibars import settings
 
+router = routers.DefaultRouter()
+router.register(r'bars', views.BarViewSet)
+router.register(r'events', views.EventViewSet)
+
 urlpatterns = [
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("admin/", admin.site.urls),
     path("main/", include("main.urls")),
     re_path(r'^$', main_views.main_view, name='main'),
