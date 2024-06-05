@@ -40,9 +40,15 @@ class Bar(models.Model):
     street = models.CharField(max_length=70, help_text="Straße und Hausnummer")
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    tags = models.CharField(max_length=254, default="", help_text="Komma separierte Liste an Tags")
 
     def __str__(self):
         return self.name
+
+    def tag_list(self):
+        if len(self.tags) > 0:
+            return self.tags.split(',')
+        return []
 
 
 class Event(models.Model):

@@ -69,6 +69,11 @@
                                 {% endif %}
                                 ab {{ bar.start_time }}
                             </h6>
+                            <p>
+                                {% for tag in bar.tag_list %}
+                                    <span class="badge rounded-pill text-bg-warning">{{ tag }}</span>
+                                {% endfor %}
+                            </p>
                             <p class="card-text">
                                 <a target="_blank"
                                    href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
