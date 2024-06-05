@@ -49,45 +49,47 @@
 
                 <div class="d-flex flex-nowrap">
                     {% comment %}{% for bar in day.1 %}{% endcomment %}
-                        <div class="card me-2" style="width: 20rem">
-                            {% if not bar.image %}
-                                <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
-                                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
-                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                                    <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
-                                </svg>
-                            {% else %}
-                                <img src="{{ bar.image.url }}" class="card-img-top" height="180px">
-                            {% endif %}
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    {% if bar.open == 1 %}
-                                        Jeden {{ bar.get_day_display }}
-                                    {% else %}
-                                        Jeden 1./3./5. {{ bar.get_day_display }}
-                                    {% endif %}
-                                    ab {{ bar.start_time }}
-                                </h6>
-                                <p class="card-text">
-                                    <a target="_blank"
-                                       href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
-                                </p>
-                                <p>
-                                    {% if bar.website %}
-                                        <a target="_blank" href="{{ bar.website }}" class="card-link">Website</a>
-                                    {% endif %}
-                                    {% if bar.menu_url %}
-                                        <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Getränke Karte</a>
-                                    {% endif %}
-                                </p>
-                                {% if bar.instagram_id %}
-                                    <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
-                                       class="btn btn-primary">Instagram</a>
+                    <div class="card me-2" style="width: 20rem">
+                        {% if not bar.image %}
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#868e96"></rect>
+                                <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
+                            </svg>
+                        {% else %}
+                            <img src="{{ bar.image.url }}" class="card-img-top" height="180px">
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                {% if bar.open == 1 %}
+                                    Jeden {{ bar.get_day_display }}
+                                {% else %}
+                                    Jeden 1./3./5. {{ bar.get_day_display }}
                                 {% endif %}
+                                ab {{ bar.start_time }}
+                            </h6>
+                            <p class="card-text">
+                                <a target="_blank"
+                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
+                            </p>
+                            <p>
+                                {% if bar.website %}
+                                    <a target="_blank" href="{{ bar.website }}" class="card-link">Website</a>
+                                {% endif %}
+                                {% if bar.menu_url %}
+                                    <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Getränke Karte</a>
+                                {% endif %}
+                            </p>
+                            {% if bar.instagram_id %}
+                                <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
+                                   class="btn btn-primary">
+                                    <i class="bi bi-instagram"></i> Instagram
+                                </a>
+                            {% endif %}
 
-                            </div>
                         </div>
+                    </div>
                     {% comment %}{% endfor %}{% endcomment %}
                 </div>
             </div>
