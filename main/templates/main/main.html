@@ -17,7 +17,8 @@
     <div class="d-sm-none d-flex overflow-auto flex-nowrap mb-5">
         {% for event in events %}
             <div class="me-2">
-                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ event.bar }}: {{ event.name }}</h3>
+                <h3 class="me-2"
+                    style="position:sticky; left: 0; width: max-content">{{ event.bar }}: {{ event.name }}</h3>
 
                 <div class="d-flex flex-nowrap">
                     {% comment %}{% for bar in day.1 %}{% endcomment %}
@@ -25,7 +26,7 @@
                         {% if  event.poster %}
                             <img alt="Bild {{ event.name }}" src="{{ event.poster.url }}"
                                  class="card-img-top object-fit-cover "
-                                 >
+                            >
                         {% endif %}
                         <div class="card-body">
                             <h6 class="card-title">
@@ -43,16 +44,45 @@
             <div class="col-12 col-sm-6 col-lg-3">
                 <h3 class="border-bottom pb-1 mb-3">{{ day.0 }}</h3>
                 {% for bar in day.1 %}
-                    <div class="card  mb-3 ">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ bar.name }}</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">
-                                {{ bar.open_text }}
-                            </h6>
-                            <p class="card-text">
-                                <a class="fg-white" target="_blank"
-                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}</a>
-                            </p>
+                    <div class="card mb-3 accordion bg-body-tertiary" id="acc-{{ bar.id }}">
+                        <button class="card-body accordion-button collapsed p-3"
+                                style="box-shadow: none !important; background: none;"
+                                data-bs-toggle="collapse" data-bs-target="#collapse-{{ bar.id }}">
+                            <div>
+                                <h5 class="card-title">{{ bar.name }}</h5>
+                                <h6 class="card-subtitle mb-0 text-body-secondary">
+                                    {{ bar.open_text }}
+                                </h6>
+                            </div>
+                        </button>
+                        <div class="accordion-collapse collapse" id="collapse-{{ bar.id }}">
+                            <div class="card-body pt-0">
+                                <div>
+                                    {% for tag in bar.tag_list %}
+                                        <span class="badge rounded-pill text-bg-warning">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="card-text">
+                                    <a target="_blank"
+                                       href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
+                                </div>
+                            </div>
+                            {% if "image" in features %}
+                                {% if not bar.image %}
+                                    <svg class="bd-placeholder-img" width="100%" height="100"
+                                         xmlns="http://www.w3.org/2000/svg" role="img"
+                                         aria-label="Placeholder: Image cap"
+                                         preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                        Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                                        <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
+                                    </svg>
+                                {% else %}
+                                    <img alt="Bild {{ bar.name }}" src="{{ bar.image.url }}"
+                                         class="object-fit-cover m-3 mt-0" style="width: calc(100% - 2rem)"
+                                         height="140px">
+                                {% endif %}
+                            {% endif %}
 
                         </div>
                     </div>
