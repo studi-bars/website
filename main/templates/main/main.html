@@ -52,7 +52,9 @@
                                 <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
                             </svg>
                         {% else %}
-                            <img alt="Bild {{ bar.name }}" src="{{ bar.image.url }}" class="card-img-top" height="180px">
+                            <img alt="Bild {{ bar.name }}" src="{{ bar.image.url }}"
+                                 class="card-img-top object-fit-cover"
+                                 height="180px">
                         {% endif %}
                         <div class="card-body">
                             <h6 class="card-title">
