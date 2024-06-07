@@ -19,6 +19,7 @@ def main_view(request):
         'weekdays': Weekday.choices[:-3],
         'bars_by_day': bars,
         'bars': Bar.objects.all().order_by('day'),
+        'events': Event.objects.all().order_by('start_date')
     })
 
 

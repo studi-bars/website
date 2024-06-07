@@ -13,6 +13,31 @@
             </p>
         </div>
     </div>
+    <h1 class="border-bottom d-sm-none" id="die-bars">Events</h1>
+    <div class="d-sm-none d-flex overflow-auto flex-nowrap mb-5">
+        {% for event in events %}
+            <div class="me-2">
+                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ event.bar }}: {{ event.name }}</h3>
+
+                <div class="d-flex flex-nowrap">
+                    {% comment %}{% for bar in day.1 %}{% endcomment %}
+                    <div class="card me-2" style="width: 20rem">
+                        {% if  event.poster %}
+                            <img alt="Bild {{ event.name }}" src="{{ event.poster.url }}"
+                                 class="card-img-top object-fit-cover "
+                                 >
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                {{ event.description }}
+                            </h6>
+                        </div>
+                    </div>
+                    {% comment %}{% endfor %}{% endcomment %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
     <div class="row mb-5">
         {% for day in bars_by_day %}
             <div class="col-12 col-sm-6 col-lg-3">
