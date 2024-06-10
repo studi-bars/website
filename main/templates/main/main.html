@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load l10n %}
+{% load imagekit %}
 
 
 {% block content %}
@@ -107,7 +108,8 @@
                                 <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
                             </svg>
                         {% else %}
-                            <img alt="Bild {{ bar.name }}" src="{{ bar.image.url }}"
+                            {% generateimage 'studibars:thumbnail' source=bar.image as img %}
+                            <img alt="Bild {{ bar.name }}" src="{{ img.url }}"
                                  class="card-img-top object-fit-cover"
                                  height="180px">
                         {% endif %}

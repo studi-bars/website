@@ -5,6 +5,17 @@ from rest_framework import viewsets, permissions
 from main.models import Bar, Weekday, Event
 from main.serializers import BarSerializer, EventSerializer
 
+from imagekit import ImageSpec, register
+from imagekit.processors import ResizeToFill
+
+
+class Thumbnail(ImageSpec):
+    processors = [ResizeToFill(318 * 2, 180 * 2)]
+    format = 'WEBP'
+
+
+register.generator('studibars:thumbnail', Thumbnail)
+
 
 # Create your views here.
 def main_view(request):
