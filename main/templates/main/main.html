@@ -24,8 +24,9 @@
                 <div class="d-flex flex-nowrap">
                     {% comment %}{% for bar in day.1 %}{% endcomment %}
                     <div class="card me-2" style="width: 20rem">
-                        {% if  event.poster %}
-                            <img alt="Bild {{ event.name }}" src="{{ event.poster.url }}"
+                        {% if event.poster %}
+                            {% generateimage 'studibars:poster' source=event.poster as img %}
+                            <img alt="Bild {{ event.name }}" src="{{ img.url }}"
                                  class="card-img-top object-fit-cover "
                             >
                         {% endif %}
