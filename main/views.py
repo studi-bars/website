@@ -17,6 +17,14 @@ class Thumbnail(ImageSpec):
 register.generator('studibars:thumbnail', Thumbnail)
 
 
+class Poster(ImageSpec):
+    processors = [ResizeToFill(318 * 2, 450 * 2)]
+    format = 'WEBP'
+
+
+register.generator('studibars:poster', Poster)
+
+
 # Create your views here.
 def main_view(request):
     bars_by_weekday = defaultdict(list)
