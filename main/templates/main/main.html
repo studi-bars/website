@@ -4,42 +4,31 @@
 
 
 {% block content %}
-    <div class="p-3 mb-4 bg-body-tertiary rounded-3">
-        <div class="container-fluid py-3">
-            <h1 class="display-5 fw-bold">Studi Bars Aachen</h1>
-            <p class="col-xl-10 fs-4">
-                Wir sind Bars die von Studierenden in den Wohnheimen betrieben werden.
-                Bei uns gibt es Bier, Shots und Cocktails zu günstigen Preisen.
-                Jede Bar hat an einem Tag in der Woche geöffnet.
-            </p>
-        </div>
-    </div>
-    <h1 class="border-bottom d-sm-none" id="die-bars">Events</h1>
-    <div class="d-sm-none d-flex overflow-auto flex-nowrap mb-5">
-        {% for event in events %}
-            <div class="me-2">
-                <h3 class="me-2"
-                    style="position:sticky; left: 0; width: max-content">{{ event.bar }}: {{ event.name }}</h3>
-
-                <div class="d-flex flex-nowrap">
-                    {% comment %}{% for bar in day.1 %}{% endcomment %}
-                    <div class="card me-2" style="width: 20rem">
-                        {% if event.poster %}
-                            {% generateimage 'studibars:poster' source=event.poster as img %}
-                            <img alt="Bild {{ event.name }}" src="{{ img.url }}"
-                                 class="card-img-top object-fit-cover "
-                            >
-                        {% endif %}
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                {{ event.description }}
-                            </h6>
-                        </div>
-                    </div>
-                    {% comment %}{% endfor %}{% endcomment %}
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <div class="p-3 mb-4 bg-body-tertiary rounded-3">
+                <div class="container-fluid py-3">
+                    <h1 class="display-5 fw-bold">Studi Bars Aachen</h1>
+                    <p class="fs-4">
+                        Wir sind Bars die von Studierenden in den Wohnheimen betrieben werden.
+                        Bei uns gibt es Bier, Shots und Cocktails zu günstigen Preisen.
+                        Jede Bar hat an einem Tag in der Woche geöffnet.
+                    </p>
                 </div>
             </div>
-        {% endfor %}
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="list-group list-group-flush mb-4">
+                {% for event in events %}
+                    <a href="#event-{{ event.id }}"
+                       class="list-group-item list-group-item-action d-flex justify-content-between">
+                        <span>{{ event.name }}</span>
+                        <span>{{ event.start_date|date:"d.m." }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+
+        </div>
     </div>
     <div class="row mb-5">
         {% for day in bars_by_day %}
@@ -219,5 +208,50 @@
             }
         }
 
+    </script>
+    <div class="row" id="events">
+        {% for event in events %}
+            <div class="col-sm-6 col-lg-4 mb-4" id="event-{{ event.id }}">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <span class="fw-bold">{{ event.bar }}</span>
+                        <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}</span>
+                    </div>
+                    {% if event.poster %}
+                        {% generateimage 'studibars:poster' source=event.poster as img %}
+                        <img alt="Bild {{ event.name }}" src="{{ img.url }}"
+                             class="w-100"
+                        >
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title">{{ event.name }}</h3>
+                        <p class="card-text">{{ event.description }}</p>
+
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary d-flex justify-content-between">
+                            <a target="_blank" class="text-decoration-none"
+                               href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">
+                                {{ event.bar.street }}
+                            </a>
+                            <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}</span>
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+            integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
+    ></script>
+    <script>
+        const el = document.getElementById("events");
+        const msnry = new Masonry(el, {
+            percentPosition: true,
+        });
+        for (let e of document.getElementsByTagName("img")) {
+            e.onload = () => msnry.layout();
+        }
     </script>
 {% endblock %}
