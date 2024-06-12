@@ -46,9 +46,20 @@ class Bar(models.Model):
     def __str__(self):
         return self.name
 
+    def has_tags(self):
+        return len(self.tags) > 0
+
     def tag_list(self):
         if len(self.tags) > 0:
-            return self.tags.split(',')
+            items = self.tags.split(',')
+            result = []
+            for item in items:
+                if '#' in item:
+                    text, color = item.rsplit('#', 1)
+                else:
+                    text, color = item, "warning"
+                result.append((text.strip(), color))
+            return result
         return []
 
     def open_text(self):
@@ -59,6 +70,11 @@ class Bar(models.Model):
         if self.end_time is not None:
             text += f" bis ca. {formats.localize(self.end_time)}"
         return text
+
+    def day_text(self):
+        if self.open == self.OpenModel.OPEN_135:
+            return "1., 3. & 5. " + self.get_day_display()
+        return "Wöchentlich"
 
 
 class Event(models.Model):

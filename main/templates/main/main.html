@@ -52,22 +52,31 @@
                                 data-bs-toggle="collapse" data-bs-target="#collapse-{{ bar.id }}">
                             <div>
                                 <h5 class="card-title">{{ bar.name }}</h5>
-                                <h6 class="card-subtitle mb-0 text-body-secondary">
-                                    {{ bar.open_text }}
+                                <h6 class="card-subtitle mb-2 text-body-secondary d-flex align-items-baseline">
+                                    <i class="bi bi-arrow-repeat me-2"></i> {{ bar.day_text }}
+                                </h6>
+                                <h6 class="card-subtitle text-body-secondary d-flex align-items-baseline">
+                                    <i class="bi bi-clock me-2"></i> ab {{ bar.start_time }}
                                 </h6>
                             </div>
                         </button>
                         <div class="accordion-collapse collapse" id="collapse-{{ bar.id }}">
                             <div class="card-body pt-0">
-                                <div>
-                                    {% for tag in bar.tag_list %}
-                                        <span class="badge rounded-pill text-bg-warning">{{ tag }}</span>
-                                    {% endfor %}
+
+                                <div class="card-text border-top py-2 d-flex align-items-baseline">
+                                    <i class="bi bi-pin-map me-2"></i>
+                                    <a target="_blank" class="text-decoration-none"
+                                       href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">
+                                        {{ bar.street }}
+                                    </a>
                                 </div>
-                                <div class="card-text">
-                                    <a target="_blank"
-                                       href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
-                                </div>
+                                {% if bar.has_tags %}
+                                    <div class="border-top pt-2">
+                                        {% for tag in bar.tag_list %}
+                                            <span class="badge {% if not forloop.first %} ms-1 {% endif %} rounded-pill text-bg-{{ tag.1 }} mt-2">{{ tag.0 }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                             {% if "image" in features %}
                                 {% if not bar.image %}
