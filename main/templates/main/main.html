@@ -63,7 +63,7 @@
                         <div class="accordion-collapse collapse" id="collapse-{{ bar.id }}">
                             <div class="card-body pt-0">
 
-                                <div class="card-text border-top py-2 d-flex align-items-baseline">
+                                <div class="card-text border-top pt-2 d-flex align-items-baseline">
                                     <i class="bi bi-pin-map me-2"></i>
                                     <a target="_blank" class="text-decoration-none"
                                        href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">
@@ -71,7 +71,8 @@
                                     </a>
                                 </div>
                                 {% if bar.has_tags %}
-                                    <div class="border-top pt-2">
+                                    <div class="border-top my-2"></div>
+                                    <div>
                                         {% for tag in bar.tag_list %}
                                             <span class="badge {% if not forloop.first %} ms-1 {% endif %} rounded-pill text-bg-{{ tag.1 }} mt-2">{{ tag.0 }}</span>
                                         {% endfor %}
