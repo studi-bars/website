@@ -13,6 +13,8 @@ from main.serializers import BarSerializer, EventSerializer
 from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
+from studibars.settings import TIME_ZONE
+
 
 class Thumbnail1x(ImageSpec):
     processors = [ResizeToFill(318, 180)]
@@ -101,7 +103,11 @@ def download_bar_events_ics(request, bar_id):
     c.method = "PUBLISH"
     c.scale = "GREGORIAN"
     c.creator = "studibars-ac.de"
+    # From https://stackoverflow.com/questions/17152251/specifying-name-description-and-refresh-interval-in-ical-ics-format#17187346
     c.extra.append(ContentLine(name="NAME", value=f"{bar.name} Events"))
+    c.extra.append(ContentLine(name="X-WR-CALNAME", value=f"{bar.name} Events"))
+    c.extra.append(ContentLine(name="TIMEZONE-ID", value=TIME_ZONE))
+    c.extra.append(ContentLine(name="X-WR-TIMEZONE", value=TIME_ZONE))
     c.extra.append(ContentLine(name="URL", value=request.build_absolute_uri()))
     c.extra.append(ContentLine(name="REFRESH-INTERVAL", params={"VALUE": ["DURATION"]}, value="PT24H"))
     c.extra.append(ContentLine(name="X-PUBLISHED-TTL", value="PT24H"))
