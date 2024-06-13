@@ -9,20 +9,44 @@ from imagekit import ImageSpec, register
 from imagekit.processors import ResizeToFill
 
 
-class Thumbnail(ImageSpec):
+class Thumbnail1x(ImageSpec):
+    processors = [ResizeToFill(318, 180)]
+    format = 'WEBP'
+
+
+class Thumbnail1_5x(ImageSpec):
+    processors = [ResizeToFill(318 * 1.5, 180 * 1.5)]
+    format = 'WEBP'
+
+
+class Thumbnail2x(ImageSpec):
     processors = [ResizeToFill(318 * 2, 180 * 2)]
     format = 'WEBP'
 
 
-register.generator('studibars:thumbnail', Thumbnail)
+register.generator('studibars:thumbnail1x', Thumbnail1x)
+register.generator('studibars:thumbnail1_5x', Thumbnail1_5x)
+register.generator('studibars:thumbnail2x', Thumbnail2x)
 
 
-class Poster(ImageSpec):
+class Poster1x(ImageSpec):
+    processors = [ResizeToFill(318, 450)]
+    format = 'WEBP'
+
+
+class Poster1_5x(ImageSpec):
+    processors = [ResizeToFill(318 * 1.5, 450 * 1.5)]
+    format = 'WEBP'
+
+
+class Poster2x(ImageSpec):
     processors = [ResizeToFill(318 * 2, 450 * 2)]
     format = 'WEBP'
 
 
-register.generator('studibars:poster', Poster)
+register.generator('studibars:poster1x', Poster1x)
+register.generator('studibars:poster1_5x', Poster1_5x)
+register.generator('studibars:poster2x', Poster2x)
 
 
 # Create your views here.

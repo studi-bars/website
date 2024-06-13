@@ -108,10 +108,13 @@
                                 <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
                             </svg>
                         {% else %}
-                            {% generateimage 'studibars:thumbnail' source=bar.image as img %}
-                            <img alt="Bild {{ bar.name }}" src="{{ img.url }}"
-                                 class="card-img-top object-fit-cover"
-                                 height="180px">
+                            {% generateimage 'studibars:thumbnail1x' source=bar.image as thumb1 %}
+                            {% generateimage 'studibars:thumbnail1_5x' source=bar.image as thumb1_5 %}
+                            {% generateimage 'studibars:thumbnail2x' source=bar.image as thumb2 %}
+                            <img alt="Bild {{ bar.name }}" src="{{ thumb1.url }}"
+                                 srcset="{{ thumb1.url }}, {{ thumb1_5.url }} 1.5x, {{ thumb2.url }} 2x"
+                                 width="{{ thumb1.width }}" height="{{ thumb1.height }}"
+                                 class="card-img-top object-fit-cover" loading="lazy">
                         {% endif %}
                         <div class="card-body">
                             <h6 class="card-title">
@@ -218,9 +221,13 @@
                         <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}</span>
                     </div>
                     {% if event.poster %}
-                        {% generateimage 'studibars:poster' source=event.poster as img %}
-                        <img alt="Bild {{ event.name }}" src="{{ img.url }}"
-                             class="w-100"
+                        {% generateimage 'studibars:poster1x' source=event.poster as img1 %}
+                        {% generateimage 'studibars:poster1_5x' source=event.poster as img1_5 %}
+                        {% generateimage 'studibars:poster2x' source=event.poster as img2 %}
+                        <img alt="Bild {{ event.name }}" src="{{ img1.url }}"
+                             srcset="{{ img1.url }}, {{ img1_5.url }} 1.5x, {{ img2.url }} 2x"
+                             width="{{ img1.width }}" height="{{ img1.height }}"
+                             class="w-100 h-auto" loading="lazy"
                         >
                     {% endif %}
                     <div class="card-body">
