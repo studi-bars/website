@@ -243,8 +243,12 @@
                         >
                     {% endif %}
                     <div class="card-body">
-                        <h3 class="card-title">{{ event.name }}</h3>
-                        <p class="card-text">{{ event.description }}</p>
+                        {% if event.description or not event.poster %}
+                            <h3 class="card-title">{{ event.name }}</h3>
+                        {% endif %}
+                        {% if event.description %}
+                            <p class="card-text">{{ event.description }}</p>
+                        {% endif %}
 
                     </div>
                     <div class="card-footer">
