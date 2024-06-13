@@ -19,7 +19,7 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="list-group list-group-flush mb-4">
-                {% for event in events %}
+                {% for event in events|slice:":7" %}
                     <a href="#event-{{ event.id }}"
                        class="list-group-item list-group-item-action d-flex justify-content-between">
                         <span>{{ event.name }}</span>
@@ -227,7 +227,9 @@
                     <div class="card-header d-flex justify-content-between">
                         <span class="fw-bold">{{ event.bar }}</span>
                         <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}
-                            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}"><i class="bi bi-calendar-plus align-top"></i></a>
+                            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}">
+                                <i class="bi bi-calendar-plus align-top"></i>
+                            </a>
                         </span>
                     </div>
                     {% if event.poster %}
