@@ -1,3 +1,4 @@
+import datetime
 from collections import defaultdict
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
@@ -52,7 +53,7 @@ register.generator('studibars:poster2x', Poster2x)
 # Create your views here.
 def main_view(request):
     bars_by_weekday = defaultdict(list)
-    for bar in Bar.objects.all():
+    for bar in Bar.objects.all().order_by('start_time'):
         bars_by_weekday[bar.day].append(bar)
     bars = []
     for day in Weekday.choices[:-3]:
@@ -61,8 +62,8 @@ def main_view(request):
         'title': 'Home',
         'weekdays': Weekday.choices[:-3],
         'bars_by_day': bars,
-        'bars': Bar.objects.all().order_by('day'),
-        'events': Event.objects.all().order_by('start_date'),
+        'bars': Bar.objects.all().order_by('day', 'start_time'),
+        'events': Event.objects.filter(start_date__gte=datetime.date.today()).order_by('start_date'),
         'features': request.GET.get('features', '')
     })
 
