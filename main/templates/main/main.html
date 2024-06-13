@@ -221,7 +221,9 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <span class="fw-bold">{{ event.bar }}</span>
-                        <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}</span>
+                        <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}
+                            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}"><i class="bi bi-calendar-plus align-top"></i></a>
+                        </span>
                     </div>
                     {% if event.poster %}
                         {% generateimage 'studibars:poster1x' source=event.poster as img1 %}

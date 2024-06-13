@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import formats
+from ics import Event as IcsEvent, Organizer, DisplayAlarm, Geo
 
 
 class Weekday(models.IntegerChoices):
@@ -82,6 +85,24 @@ class Event(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
     poster = models.FileField(upload_to="events/", null=True, blank=True)
+
+    def to_ics_event(self) -> IcsEvent:
+        ics_event = IcsEvent()
+        ics_event.name = self.name
+        ics_event.begin = self.start_date
+        ics_event.end = self.end_date if self.end_date else self.start_date + timedelta(hours=4)
+        ics_event.description = self.description
+        ics_event.location = f"{self.bar.street}, {self.bar.zip_code} {self.bar.city}"
+        if self.bar.latitude and self.bar.longitude:
+            ics_event.geo = Geo(self.bar.latitude, self.bar.longitude)
+        ics_event.status = "CONFIRMED"
+        ics_event.uid = f"event-{self.id}@studibars-ac.de"
+        ics_event.organizer = Organizer(common_name=self.bar.name, email="noreply@studibars-ac.de")
+
+        # Add an alarm/reminder
+        alarm = DisplayAlarm(trigger=timedelta(days=-1))
+        ics_event.alarms.append(alarm)
+        return ics_event
 
     def __str__(self):
         return self.name

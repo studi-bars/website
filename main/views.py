@@ -1,6 +1,9 @@
 import datetime
 from collections import defaultdict
+
+from django.http import HttpResponse
 from django.shortcuts import render
+from ics import Calendar
 from rest_framework import viewsets, permissions
 
 from main.models import Bar, Weekday, Event
@@ -71,6 +74,17 @@ def main_view(request):
         'events': events.order_by('start_date'),
         'features': request.GET.get('features', '')
     })
+
+
+def download_event_ics(request, event_id):
+    event = Event.objects.get(id=event_id)
+
+    c = Calendar()
+    c.events.add(event.to_ics_event())
+
+    response = HttpResponse(c.serialize(), content_type='text/calendar')
+    response['Content-Disposition'] = f'attachment; filename={event.name}.ics'
+    return response
 
 
 # Allows all CRUP Operations
