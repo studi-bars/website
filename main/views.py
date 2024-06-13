@@ -58,12 +58,17 @@ def main_view(request):
     bars = []
     for day in Weekday.choices[:-3]:
         bars.append((day[1], bars_by_weekday[day[0]]))
+    now = datetime.datetime.now()
+    events = Event.objects.filter(start_date__gte=datetime.date.today())
+    # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
+    if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
+        events = events.exclude(bar__name__icontains="symposion")
     return render(request, 'main/main.html', {
         'title': 'Home',
         'weekdays': Weekday.choices[:-3],
         'bars_by_day': bars,
         'bars': Bar.objects.all().order_by('day', 'start_time'),
-        'events': Event.objects.filter(start_date__gte=datetime.date.today()).order_by('start_date'),
+        'events': events.order_by('start_date'),
         'features': request.GET.get('features', '')
     })
 
