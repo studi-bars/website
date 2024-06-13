@@ -23,7 +23,7 @@
                     <a href="#event-{{ event.id }}"
                        class="list-group-item list-group-item-action d-flex justify-content-between">
                         <span>{{ event.name }}</span>
-                        <span>{{ event.start_date|date:"d.m." }}</span>
+                        <span style="font-variant-numeric: tabular-nums;">{{ event.start_date|date:"d.m." }}</span>
                     </a>
                 {% endfor %}
             </div>
