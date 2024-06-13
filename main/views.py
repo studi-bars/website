@@ -15,7 +15,7 @@ class Thumbnail1x(ImageSpec):
 
 
 class Thumbnail1_5x(ImageSpec):
-    processors = [ResizeToFill(318 * 1.5, 180 * 1.5)]
+    processors = [ResizeToFill(int(318 * 1.5), int(180 * 1.5))]
     format = 'WEBP'
 
 
@@ -35,7 +35,7 @@ class Poster1x(ImageSpec):
 
 
 class Poster1_5x(ImageSpec):
-    processors = [ResizeToFill(318 * 1.5, 450 * 1.5)]
+    processors = [ResizeToFill(int(318 * 1.5), int(450 * 1.5))]
     format = 'WEBP'
 
 
