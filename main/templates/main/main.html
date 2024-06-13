@@ -152,10 +152,9 @@
         {% endfor %}
     </div>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" fetchpriority="low"/>
     <div class="my-5 rounded-3 me-4 me-sm-0" style="height: 500px" id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         .marker-container {
             display: flex;
@@ -168,39 +167,41 @@
         }
     </style>
     <script>
-        const map = L.map('map').setView([50.78, 6.0758], 14);
+        function createMap() {
+            const map = L.map('map').setView([50.78, 6.0758], 14);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
 
-        const markers = [
-            {% for bar in bars %}
-                {% if bar.latitude and bar.longitude %}
-                    {
-                        position: [{{ bar.latitude|unlocalize }}, {{ bar.longitude|unlocalize }}], icon:
-                            `<div class="marker-container">
+            const markers = [
+                {% for bar in bars %}
+                    {% if bar.latitude and bar.longitude %}
+                        {
+                            position: [{{ bar.latitude|unlocalize }}, {{ bar.longitude|unlocalize }}], icon:
+                                `<div class="marker-container">
                               <svg class="marker-svg" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g transform="matrix(1,0,0,1,0,0)"><path fill="#da2f2a" d="m307.79 223.476-53.135 78.467-78.573 78.18c-29.222-37.139-61.132-73.116-80.587-116.631l42.352-64.879 64.957-62.668c-21.71 26.831-20.089 66.293 4.864 91.246 26.696 26.696 69.968 26.696 96.663 0a68.87 68.87 0 0 0 3.459-3.715z" opacity="1" data-original="#ecb72b" class=""></path><path fill="#da2f2a" d="M309.02 222.003c21.9-26.844 20.346-66.442-4.688-91.462-26.696-26.696-69.968-26.696-96.663 0a69.649 69.649 0 0 0-3.215 3.445l44.811-72.847L310.06 8.33c45.407 14.374 82.964 46.379 104.648 87.977l-44.352 71.516z" opacity="1" data-original="#5085f7" class=""></path><path fill="#da2f2a" d="M202.802 135.949 95.49 263.498c-10.643-23.783-17.562-49.817-18.276-79.529a159.575 159.575 0 0 1-.081-5.093c0-43.718 15.685-83.789 41.746-114.861z" opacity="1" data-original="#da2f2a" class=""></path><path fill="#da2f2a" d="M202.802 135.949 118.876 64.01C151.692 24.885 200.936 0 256.002 0c18.845 0 37.009 2.916 54.065 8.32z" opacity="1" data-original="#4274eb" class=""></path><path fill="#da2f2a" d="M434.867 178.865c0-29.779-7.278-57.859-20.151-82.558l-238.64 283.826c27.113 34.488 51.887 69.985 62.183 113.454.33 1.392.685 3.019 1.063 4.848 3.733 18.086 29.63 18.086 33.363 0 .378-1.829.733-3.456 1.063-4.848 27.448-115.892 157.807-175.118 161.043-309.618.046-1.696.076-3.397.076-5.104z" opacity="1" data-original="#60a850" class=""></path></g></svg>
                               <h5 class="text-nowrap">{{ bar.name }}</h5>
                             </div>`,
-                        text: `<h5 class="mb-1">{{ bar.name }}</h5><p class="m-0">{{ bar.open_text }}</p>
+                            text: `<h5 class="mb-1">{{ bar.name }}</h5><p class="m-0">{{ bar.open_text }}</p>
                                 <button href="#" class="btn btn-sm btn-primary mt-2" onclick="openInMaps({{ bar.latitude|unlocalize }}, {{ bar.longitude|unlocalize }})">Open in Maps</button>`
-                    },
-                {% endif %}
-            {% endfor %}
-        ];
+                        },
+                    {% endif %}
+                {% endfor %}
+            ];
 
-        markers.forEach(function (marker) {
-            const icon = L.divIcon({
-                className: 'marker-label',
-                html: marker.icon,
-                iconSize: [36, 36], // size of the icon
-                iconAnchor: [18, 36], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -36] // point from which the popup should open relative to the iconAnchor
+            markers.forEach(function (marker) {
+                const icon = L.divIcon({
+                    className: 'marker-label',
+                    html: marker.icon,
+                    iconSize: [36, 36], // size of the icon
+                    iconAnchor: [18, 36], // point of the icon which will correspond to marker's location
+                    popupAnchor: [0, -36] // point from which the popup should open relative to the iconAnchor
+                });
+                L.marker(marker.position, {icon}).addTo(map).bindPopup(marker.text);
             });
-            L.marker(marker.position, {icon}).addTo(map).bindPopup(marker.text);
-        });
+        }
 
         function openInMaps(lat, lng) {
             const platform = navigator.platform.toLowerCase();
@@ -210,8 +211,10 @@
                 window.open("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng);
             }
         }
-
     </script>
+    <script async fetchpriority="low" onload="createMap()"
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <div class="row" id="events">
         {% for event in events %}
             <div class="col-sm-6 col-lg-4 mb-4" id="event-{{ event.id }}">
