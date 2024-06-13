@@ -1,9 +1,10 @@
 import datetime
 from collections import defaultdict
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from ics import Calendar
+from ics.grammar.parse import ContentLine
 from rest_framework import viewsets, permissions
 
 from main.models import Bar, Weekday, Event
@@ -77,13 +78,39 @@ def main_view(request):
 
 
 def download_event_ics(request, event_id):
-    event = Event.objects.get(id=event_id)
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return HttpResponse(status=404)
 
     c = Calendar()
     c.events.add(event.to_ics_event())
 
     response = HttpResponse(c.serialize(), content_type='text/calendar')
     response['Content-Disposition'] = f'attachment; filename={event.name}.ics'
+    return response
+
+
+def download_bar_events_ics(request, bar_id):
+    try:
+        bar = Bar.objects.get(id=bar_id)
+    except Event.DoesNotExist:
+        return HttpResponse(status=404)
+
+    c = Calendar()
+    c.method = "PUBLISH"
+    c.scale = "GREGORIAN"
+    c.creator = "studibars-ac.de"
+    c.extra.append(ContentLine(name="NAME", value=f"{bar.name} Events"))
+    c.extra.append(ContentLine(name="URL", value=request.build_absolute_uri()))
+    c.extra.append(ContentLine(name="REFRESH-INTERVAL", params={"VALUE": ["DURATION"]}, value="PT24H"))
+    c.extra.append(ContentLine(name="X-PUBLISHED-TTL", value="PT24H"))
+
+    for event in Event.objects.filter(bar_id=bar_id):
+        c.events.add(event.to_ics_event())
+
+    response = HttpResponse(c.serialize(), content_type='text/calendar')
+    response['Content-Disposition'] = f'attachment; filename={bar}-events.ics'
     return response
 
 

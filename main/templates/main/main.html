@@ -136,6 +136,11 @@
                                 {% if bar.menu_url %}
                                     <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Getränke Karte</a>
                                 {% endif %}
+                                <!-- @formatter:off -->
+                                <a class="align-middle" href="webcal://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+                                    <i class="bi bi-calendar-plus align-top"></i>
+                                </a>
+                                <!-- @formatter:on -->
                             </p>
                             {% if bar.instagram_id %}
                                 <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
