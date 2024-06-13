@@ -67,8 +67,6 @@ class Bar(models.Model):
         if self.open == self.OpenModel.OPEN_135:
             text += f"{self.OpenModel.OPEN_135.label} "
         text += f"{self.get_day_display()} ab {formats.localize(self.start_time)}"
-        if self.end_time is not None:
-            text += f" bis ca. {formats.localize(self.end_time)}"
         return text
 
     def day_text(self):
