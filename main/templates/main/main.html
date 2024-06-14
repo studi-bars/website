@@ -98,6 +98,11 @@
         {% endfor %}
     </div>
     <h1 class="border-bottom" id="die-bars">Die Bars</h1>
+    <style>
+        .seperated-by-bar span:not(:last-child)::after {
+            content: " |";
+        }
+    </style>
     <div class="d-flex overflow-auto flex-nowrap mb-5">
         {% for bar in bars %}
             <div class="me-2">
@@ -144,24 +149,28 @@
                                 {% endfor %}
                             </p>
                             {% if bar.instagram_id or bar.website or bar.menu_url %}
-                                <div class=" border-top pt-2 px-2">
+                                <div class="seperated-by-bar border-top pt-2 px-2">
                                     {% if bar.instagram_id %}
-                                        <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
-                                           class="text-decoration-none">
-                                            Instagram
-                                        </a>
+                                        <span>
+                                            <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
+                                               class="text-decoration-none">
+                                                Instagram
+                                            </a>
+                                        </span>
                                     {% endif %}
                                     {% if bar.website %}
-                                        |
-                                        <a target="_blank" href="{{ bar.website }}"
-                                           class="text-decoration-none">
-                                            Website
-                                        </a>
+                                        <span>
+                                            <a target="_blank" href="{{ bar.website }}" class="text-decoration-none">
+                                                Website
+                                            </a>
+                                        </span>
                                     {% endif %}
                                     {% if bar.menu_url %}
-                                        |
-                                        <a target="_blank" href="{{ bar.menu_url }}" class="text-decoration-none">Getränke
-                                            Karte</a>
+                                        <span>
+                                            <a target="_blank" href="{{ bar.menu_url }}" class="text-decoration-none">Getränke
+                                                Karte
+                                            </a>
+                                        </span>
                                     {% endif %}
                                 </div>
                             {% endif %}
