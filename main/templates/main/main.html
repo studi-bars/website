@@ -104,7 +104,6 @@
                 <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ bar.name }}</h3>
 
                 <div class="d-flex flex-nowrap">
-                    {% comment %}{% for bar in day.1 %}{% endcomment %}
                     <div class="card me-2 bg-body-tertiary" style="width: 20rem">
                         {% if not bar.image %}
                             <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
@@ -168,7 +167,6 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% comment %}{% endfor %}{% endcomment %}
                 </div>
             </div>
         {% endfor %}
