@@ -4,19 +4,24 @@
 
 
 {% block content %}
-    <div class="row">
-        <div class="col-12 col-md-8">
+    <div style="position: relative">
+        <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px"
+             src="/static/IMG_2985.jpg">
+        <div class="col-12 col-md-8" style="position: absolute; left: 2rem; top: 10rem">
             <div class="p-3 mb-4 bg-body-tertiary rounded-3">
-                <div class="container-fluid py-3">
-                    <h1 class="display-5 fw-bold">Studibars Aachen</h1>
-                    <p class="fs-4">
+                <div class="container-fluid py-2">
+                    <h1 class="display-7 fw-bold">Studibars Aachen</h1>
+                    <p class="fs-5">
                         Wir sind die Bars, die von Studis aus den Wohnheimen betrieben werden. Bei uns gibt es Bier,
-                        Shots, Cocktails und co. zu unschlagbar günstigen Preisen. Jede Bar hat an einem bestimmten Tag
-                        der Woche geöffnet.
+                        Shots, Cocktails und co. zu unschlagbar günstigen Preisen.
                     </p>
                 </div>
             </div>
         </div>
+    </div>
+    <div style="height: 420px"></div>
+    <div class="row d-none">
+
         <div class="col-12 col-md-4">
             <div class="list-group list-group-flush mb-4">
                 {% for event in events|slice:":7" %}
@@ -35,7 +40,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
                 <h3 class="border-bottom pb-1 mb-3">{{ day.0 }}</h3>
                 {% for bar in day.1 %}
-                    <div class="card mb-3 accordion bg-body-tertiary" id="acc-{{ bar.id }}">
+                    <div class="card mb-3 accordion bg-body-tertiary border-0" id="acc-{{ bar.id }}">
                         <button class="card-body accordion-button collapsed p-3"
                                 style="box-shadow: none !important; background: none;"
                                 data-bs-toggle="collapse" data-bs-target="#collapse-{{ bar.id }}">
@@ -99,7 +104,7 @@
 
                 <div class="d-flex flex-nowrap">
                     {% comment %}{% for bar in day.1 %}{% endcomment %}
-                    <div class="card me-2" style="width: 20rem">
+                    <div class="card me-2 bg-body-tertiary" style="width: 20rem">
                         {% if not bar.image %}
                             <svg class="bd-placeholder-img card-img-top" width="100%" height="180"
                                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap"
@@ -117,38 +122,49 @@
                                  class="card-img-top object-fit-cover" loading="lazy">
                         {% endif %}
                         <div class="card-body">
-                            <h6 class="card-title">
-                                {{ bar.open_text }}
+                            <h6 class="card-title d-flex align-items-baseline mb-1">
+                                <i class="bi bi-arrow-repeat mx-2"></i> {{ bar.open_text }}
+                                <!-- @formatter:off -->
+                                <a class="mx-2" href="webcal://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+                                    <i class="bi bi-calendar-plus align-top"></i>
+                                </a>
+                                <!-- @formatter:on -->
                             </h6>
-                            <p>
+
+                            <div class="card-text d-flex align-items-baseline py-1">
+                                <i class="bi bi-pin-map mx-2"></i>
+                                <a target="_blank" class="text-decoration-none"
+                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">
+                                    {{ bar.street }}
+                                </a>
+                            </div>
+                            <p class="ms-3">
                                 {% for tag in bar.tag_list %}
                                     <span class="badge {% if not forloop.first %} ms-1 {% endif %} rounded-pill text-bg-{{ tag.1 }} mt-2">{{ tag.0 }}</span>
                                 {% endfor %}
                             </p>
-                            <p class="card-text">
-                                <a target="_blank"
-                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">{{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}</a>
-                            </p>
-                            <p>
-                                {% if bar.website %}
-                                    <a target="_blank" href="{{ bar.website }}" class="card-link">Website</a>
-                                {% endif %}
-                                {% if bar.menu_url %}
-                                    <a target="_blank" href="{{ bar.menu_url }}" class="card-link">Getränke Karte</a>
-                                {% endif %}
-                                <!-- @formatter:off -->
-                                <a class="align-middle" href="webcal://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
-                                    <i class="bi bi-calendar-plus align-top"></i>
-                                </a>
-                                <!-- @formatter:on -->
-                            </p>
-                            {% if bar.instagram_id %}
-                                <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
-                                   class="btn btn-primary">
-                                    <i class="bi bi-instagram"></i> Instagram
-                                </a>
+                            {% if bar.instagram_id or bar.website or bar.menu_url %}
+                                <div class=" border-top pt-2 px-2">
+                                    {% if bar.instagram_id %}
+                                        <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
+                                           class="text-decoration-none">
+                                            Instagram
+                                        </a>
+                                    {% endif %}
+                                    {% if bar.website %}
+                                        |
+                                        <a target="_blank" href="{{ bar.website }}"
+                                           class="text-decoration-none">
+                                            Website
+                                        </a>
+                                    {% endif %}
+                                    {% if bar.menu_url %}
+                                        |
+                                        <a target="_blank" href="{{ bar.menu_url }}" class="text-decoration-none">Getränke
+                                            Karte</a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
-
                         </div>
                     </div>
                     {% comment %}{% endfor %}{% endcomment %}
