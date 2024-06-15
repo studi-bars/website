@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
+from django_filters import FilterSet
 from ics import Calendar
 from ics.grammar.parse import ContentLine
 from rest_framework import viewsets, permissions
@@ -188,15 +189,40 @@ def sitemap(request):
 
 
 # Allows all CRUP Operations
+class BarFilter(FilterSet):
+    class Meta:
+        model = Bar
+        fields = {
+            'name': ['iexact', 'icontains'],
+            'description': ['icontains'],
+            'day': ['exact', 'lt', 'lte', 'gt', 'gte'],
+            'tags': ['icontains'],
+        }
+
+
 class BarViewSet(viewsets.ModelViewSet):
-    queryset = Bar.objects.all()
+    queryset = Bar.objects.all().filter()
     serializer_class = BarSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filterset_fields = ['name', 'description', 'day', 'start_time', 'end_time', 'open', 'tags']
+    filterset_class = BarFilter
+
+
+class EventFilter(FilterSet):
+    class Meta:
+        model = Event
+        fields = {
+            'name': ['iexact', 'icontains'],
+            'description': ['icontains'],
+            'start_date': ['date', 'date__gte', 'lt', 'lte', 'gt', 'gte'],
+            'end_date': ['date', 'date__lte', 'lt', 'lte', 'gt', 'gte'],
+            'bar': ['exact'],
+            'bar__name': ['iexact', 'icontains'],
+        }
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().filter()
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_fields = ['name', 'description', 'bar', 'start_date', 'end_date']
+    filterset_class = EventFilter
