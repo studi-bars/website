@@ -44,10 +44,18 @@
                     <a class="nav-link active" aria-current="page" href="/#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/#die-bars">Die Bars</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/#events">Events</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Die Bars
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for bar in bars %}
+                            <li><a class="dropdown-item" href="{{ bar.url_path }}">{{ bar.name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </li>
                 <li class="nav-item py-2 py-md-1 col-12 col-md-auto">
                     <div class="vr d-none d-md-flex h-100 mx-md-2 text-white"></div>
