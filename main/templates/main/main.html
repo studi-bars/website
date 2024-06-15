@@ -105,7 +105,9 @@
     <div class="d-flex overflow-auto flex-nowrap mb-5">
         {% for bar in bars %}
             <div class="me-2">
-                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">{{ bar.name }}</h3>
+                <h3 class="me-2" style="position:sticky; left: 0; width: max-content">
+                    <a class="text-reset text-decoration-none" href="{{ bar.url_path }}">{{ bar.name }}</a>
+                </h3>
 
                 <div class="d-flex flex-nowrap">
                     <div class="card me-2 bg-body-tertiary" style="width: 20rem">
