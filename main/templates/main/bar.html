@@ -4,37 +4,40 @@
     <div class="container px-0 col-11 col-lg-8">
         <h1>{{ bar.name }}</h1>
     </div>
-    <div class="container px-0 col-12 col-lg-10">
-        <div class="row">
-            <div class="col-12 mb-3">
-                <div id="carouselExample" class="carousel slide">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img style="height: 400px" src="{{ bar.image.url }}" class="d-block w-100 object-fit-cover"
-                                 alt="{{ bar.name }}">
-                        </div>
-                        {% for image in bar.images.all %}
+    {% if bar.image %}
+        <div class="container px-0 col-12 col-lg-10">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div id="carouselExample" class="carousel slide">
+                        <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img style="height: 400px" src="{{ image.image.url }}"
+                                <img style="height: 400px" src="{{ bar.image.url }}"
                                      class="d-block w-100 object-fit-cover"
                                      alt="{{ bar.name }}">
                             </div>
-                        {% endfor %}
+                            {% for image in bar.images.all %}
+                                <div class="carousel-item active">
+                                    <img style="height: 400px" src="{{ image.image.url }}"
+                                         class="d-block w-100 object-fit-cover"
+                                         alt="{{ bar.name }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     <div class="container px-0 col-11 col-lg-8">
         <div class="d-flex align-items-baseline mb-2">
             <i class="bi bi-arrow-repeat me-2"></i> {{ bar.day_text }}
