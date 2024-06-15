@@ -86,11 +86,11 @@
         <div class="d-flex align-items-baseline mb-2">
             <i class="bi bi-calendar-event me-2"></i>
             <!-- @formatter:off -->
-            <a class="text-decoration-none" href="webcal://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+            <a class="text-decoration-none" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}">
                Events Abonnieren
             </a>
             <span class="mx-1">/</span>
-            <a class="text-decoration-none" href="https://calendar.google.com/calendar/r?cid=http://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+            <a class="text-decoration-none" href="https://calendar.google.com/calendar/r?cid=http://{{ request.get_host }}{{ bar.ics_url_path }}">
                mit Google
             </a>
             <!-- @formatter:on -->

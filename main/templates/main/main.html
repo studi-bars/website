@@ -131,7 +131,7 @@
                             <h6 class="card-title d-flex align-items-baseline mb-1">
                                 <i class="bi bi-arrow-repeat mx-2"></i> {{ bar.open_text }}
                                 <!-- @formatter:off -->
-                                <a class="mx-2" href="webcal://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+                                <a class="mx-2" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}">
                                     <i class="bi bi-calendar-plus align-top"></i>
                                 </a>
                                 <!-- @formatter:on -->

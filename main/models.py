@@ -105,6 +105,9 @@ class Bar(models.Model):
     def url_path(self):
         return reverse("bar_view", args=[self.id, slugify(self.name)])
 
+    def ics_url_path(self):
+        return reverse("download_bar_events_ics", args=[f"{slugify(self.name)}-{self.id}"])
+
     def to_json_ld(self) -> dict:
         json_ld = {
             "@context": "https://schema.org",
