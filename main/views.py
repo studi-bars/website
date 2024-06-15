@@ -1,10 +1,12 @@
 import datetime
 import json
 from collections import defaultdict
-from traceback import _safe_string
+from datetime import timedelta
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.urls import reverse
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from ics import Calendar
 from ics.grammar.parse import ContentLine
@@ -155,6 +157,32 @@ def download_bar_events_ics(request, bar_id):
     response = HttpResponse(c.serialize(), content_type='text/calendar')
     response['Content-Disposition'] = f'attachment; filename={bar}-events.ics'
     return response
+
+
+def robots(request):
+    return render(request, 'main/robots.txt', {
+        'sitemap': request.build_absolute_uri(reverse("sitemap")),
+    })
+
+
+def sitemap(request):
+    sites = []
+    now = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    for event in Event.objects.all():
+        if event.start_date < now:
+            prio = 0
+        elif event.start_date < now + timedelta(days=10):
+            prio = 1
+        elif event.start_date < now + timedelta(days=21):
+            prio = .8
+        else:
+            prio = .5
+        sites.append((prio, request.build_absolute_uri(event.url_path())))
+    for bar in Bar.objects.all():
+        sites.append((.5, request.build_absolute_uri(bar.url_path())))
+    return render(request, 'main/sitemap.xml', {
+        'sites': sites,
+    }, content_type='application/xml; charset=utf-8')
 
 
 # Allows all CRUP Operations

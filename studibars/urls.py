@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("admin/", admin.site.urls),
-    path("main/", include("main.urls")),
+    path("", include("main.urls")),
     # OpenAPI Schema:
     path('api/schema.yaml', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
