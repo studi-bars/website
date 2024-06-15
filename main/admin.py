@@ -4,12 +4,19 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.utils import timezone
 
-from main.models import Bar, Event
+from main.models import Bar, Event, BarImage
+
+
+class BarImageInline(admin.TabularInline):
+    model = BarImage
+    extra = 1  # Number of empty forms to display
+    fields = ['image', 'order']  # Include the order field
+    sortable_field_name = 'order'  # Enable ordering by this field
 
 
 @admin.register(Bar)
 class BarAdmin(admin.ModelAdmin):
-    pass
+    inlines = [BarImageInline]
 
 
 class FutureEventsFilter(SimpleListFilter):

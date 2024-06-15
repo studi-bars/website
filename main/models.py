@@ -134,6 +134,16 @@ class Bar(models.Model):
         return json_ld
 
 
+class BarImage(models.Model):
+    bar = models.ForeignKey(Bar, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='bar_images/')
+    order = models.IntegerField(default=0,
+                                help_text="Displayed from highest to lowest. If number, from oldest to newest")
+
+    class Meta:
+        ordering = ['order', 'id']
+
+
 class Event(models.Model):
     name = models.CharField(max_length=254)
     description = models.TextField(null=True, blank=True)
