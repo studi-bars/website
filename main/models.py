@@ -2,8 +2,12 @@ from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils import formats
+from django.utils.text import slugify
 from ics import Event as IcsEvent, Organizer, DisplayAlarm, Geo
+
+from studibars.settings import JSON_LD_BASE_URL
 
 
 class Weekday(models.IntegerChoices):
@@ -14,6 +18,17 @@ class Weekday(models.IntegerChoices):
     FRIDAY = 5, 'Freitag'
     SATURDAY = 6, 'Samstag'
     SUNDAY = 7, 'Sonntag'
+
+
+ENGLISH_WEEKDAYS = {
+    Weekday.MONDAY: 'Monday',
+    Weekday.TUESDAY: 'Tuesday',
+    Weekday.WEDNESDAY: 'Wednesday',
+    Weekday.THURSDAY: 'Thursday',
+    Weekday.FRIDAY: 'Friday',
+    Weekday.SATURDAY: 'Saturday',
+    Weekday.SUNDAY: 'Sunday',
+}
 
 
 class WeekdayField(models.IntegerField):
@@ -77,6 +92,47 @@ class Bar(models.Model):
             return "1., 3. & 5. " + self.get_day_display()
         return "Wöchentlich"
 
+    def json_ld_postal_address(self) -> dict:
+        return {
+            "@type": "PostalAddress",
+            "streetAddress": self.street,
+            "addressLocality": self.city,
+            "addressRegion": "NRW",
+            "postalCode": self.zip_code,
+            "addressCountry": "DE",
+        }
+
+    def url_path(self):
+        return reverse("bar_view", args=[self.id, slugify(self.name)])
+
+    def to_json_ld(self) -> dict:
+        json_ld = {
+            "@context": "https://schema.org",
+            "@type": "BarOrPub",
+            "name": self.name,
+            "address": self.json_ld_postal_address(),
+            "priceRange": "$",
+            "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ENGLISH_WEEKDAYS[self.day],
+                "opens": str(self.start_time),
+                "closes": str(self.end_time) or "02:00",
+            },
+            "url": JSON_LD_BASE_URL + self.url_path(),
+        }
+        if self.menu_url:
+            json_ld["menu"] = self.menu_url
+            json_ld["hasMenu"] = self.menu_url
+        if self.longitude and self.latitude:
+            json_ld["geo"] = {
+                "@type": "GeoCoordinates",
+                "latitude": float(self.latitude),
+                "longitude": float(self.longitude),
+            }
+        if self.website:
+            json_ld["sameAs"] = self.website
+        return json_ld
+
 
 class Event(models.Model):
     name = models.CharField(max_length=254)
@@ -103,6 +159,32 @@ class Event(models.Model):
         alarm = DisplayAlarm(trigger=timedelta(days=-1))
         ics_event.alarms.append(alarm)
         return ics_event
+
+    def url_path(self):
+        return reverse("event_view", args=[self.id, slugify(f"{self.name}-{self.bar.name}-{self.start_date.date()}")])
+
+    def to_json_ld(self) -> dict:
+        event = {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": self.name,
+            "description": self.description,
+            "startDate": str(self.start_date),
+            "endDate": str(self.end_date or self.start_date + timedelta(hours=5)),
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "location": {
+                "@type": "Place",
+                "name": self.bar.name,
+                "address": self.bar.json_ld_postal_address(),
+            },
+            "organizer": self.bar.to_json_ld(),
+            "isAccessibleForFree": True,
+            "url": JSON_LD_BASE_URL + self.url_path(),
+        }
+        if self.poster:
+            event["image"] = self.poster.url
+        return event
 
     def __str__(self):
         return self.name

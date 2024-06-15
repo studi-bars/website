@@ -27,6 +27,8 @@ DEBUG = True
 
 DNS_POSTFIXES = ["", "-ac", "-aachen"]
 
+JSON_LD_BASE_URL = "https://studibars-ac.de"
+
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost'] + [f"{prefix}studibars{postfix}.de" for prefix in ["", "www."] for postfix in DNS_POSTFIXES]
 CSRF_TRUSTED_ORIGINS = [f"https://{prefix}studibars{postfix}.de" for prefix in ["", "www."] for postfix in DNS_POSTFIXES]
 

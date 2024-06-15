@@ -2,7 +2,6 @@
 {% load l10n %}
 {% load imagekit %}
 
-
 {% block content %}
     <div class="mb-4" style="position: relative; height: 400px">
         <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px"
@@ -247,44 +246,7 @@
     <div class="row" id="events">
         {% for event in events %}
             <div class="col-sm-6 col-lg-4 mb-4" id="event-{{ event.id }}">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <span class="fw-bold">{{ event.bar }}</span>
-                        <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}
-                            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}">
-                                <i class="bi bi-calendar-plus align-top"></i>
-                            </a>
-                        </span>
-                    </div>
-                    {% if event.poster %}
-                        {% generateimage 'studibars:poster1x' source=event.poster as img1 %}
-                        {% generateimage 'studibars:poster1_5x' source=event.poster as img1_5 %}
-                        {% generateimage 'studibars:poster2x' source=event.poster as img2 %}
-                        <img alt="Bild {{ event.name }}" src="{{ img1.url }}"
-                             srcset="{{ img1.url }}, {{ img1_5.url }} 1.5x, {{ img2.url }} 2x"
-                             width="{{ img1.width }}" height="{{ img1.height }}"
-                             class="w-100 h-auto" loading="lazy"
-                        >
-                    {% endif %}
-                    {% if event.description or not event.poster %}
-                        <div class="card-body">
-                            <h3 class="card-title">{{ event.name }}</h3>
-                            {% if event.description %}
-                                <p class="card-text">{{ event.description }}</p>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <div class="card-footer">
-                        <small class="text-body-secondary d-flex justify-content-between">
-                            <a target="_blank" class="text-decoration-none"
-                               href="https://maps.google.com/?q={{ event.bar.name }}, {{ event.bar.street }}, {{ event.bar.zip_code }} {{ event.bar.city }}">
-                                {{ event.bar.street }}
-                            </a>
-                            <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}</span>
-                        </small>
-                    </div>
-
-                </div>
+                {% include "./event_card.html" %}
             </div>
         {% endfor %}
     </div>

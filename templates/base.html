@@ -14,6 +14,11 @@
     <meta content="Eine Übersichtsseite über die Studi Bars in Aachen. Die Bars in den Wohnheimen werden von Studierenden betrieben und es gibt für wenig Geld Bier und Cocktails."
           name="description">
     <meta content="Studi Bars, Bar, Aachen, Studenten, Studierende, Bier, Cocktails, Events, günstig" name="keywords">
+    {% if json_ld %}
+        <script type="application/ld+json">
+            {{ json_ld }}
+        </script>
+    {% endif %}
 </head>
 
 <body>
@@ -33,16 +38,16 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-md-center" id="navbarCollapse">
-            <a class="navbar-brand d-md-block d-none" href="#">Studibars Aachen</a>
+            <a class="navbar-brand d-md-block d-none" href="/#">Studibars Aachen</a>
             <ul class="navbar-nav mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#die-bars">Die Bars</a>
+                    <a class="nav-link" href="/#die-bars">Die Bars</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#events">Events</a>
+                    <a class="nav-link" href="/#events">Events</a>
                 </li>
                 <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
                     <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>

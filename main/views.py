@@ -1,8 +1,11 @@
 import datetime
+import json
 from collections import defaultdict
+from traceback import _safe_string
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.utils.safestring import mark_safe
 from ics import Calendar
 from ics.grammar.parse import ContentLine
 from rest_framework import viewsets, permissions
@@ -58,24 +61,58 @@ register.generator('studibars:poster2x', Poster2x)
 
 # Create your views here.
 def main_view(request):
+    json_ld = []
     bars_by_weekday = defaultdict(list)
     for bar in Bar.objects.all().order_by('start_time'):
         bars_by_weekday[bar.day].append(bar)
+        json_ld.append(bar.to_json_ld())
     bars = []
     for day in Weekday.choices[:-3]:
         bars.append((day[1], bars_by_weekday[day[0]]))
     now = datetime.datetime.now()
     events = Event.objects.filter(start_date__gte=datetime.date.today())
+    for event in events:
+        json_ld.append(event.to_json_ld())
     # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
     if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
         events = events.exclude(bar__name__icontains="symposion")
     return render(request, 'main/main.html', {
         'title': 'Home',
+        'json_ld': mark_safe(json.dumps(json_ld)),
         'weekdays': Weekday.choices[:-3],
         'bars_by_day': bars,
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'events': events.order_by('start_date'),
         'features': request.GET.get('features', '')
+    })
+
+
+def bar_view(request, bar_id, name):
+    try:
+        bar = Bar.objects.get(id=bar_id)
+    except Bar.DoesNotExist:
+        raise Http404
+    json_ld = [bar.to_json_ld()]
+    events = bar.event_set.filter(start_date__gte=datetime.date.today())
+    for event in events:
+        json_ld.append(event.to_json_ld())
+    return render(request, 'main/bar.html', {
+        'title': bar.name,
+        'json_ld': mark_safe(json.dumps(json_ld)),
+        'bar': bar,
+        'events': events.order_by('start_date'),
+    })
+
+
+def event_view(request, event_id, name):
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        raise Http404
+    return render(request, 'main/event.html', {
+        'title': f"{event.bar.name} - {event.name} - {event.start_date.date()}",
+        'json_ld': mark_safe(json.dumps(event.to_json_ld())),
+        'event': event,
     })
 
 
