@@ -90,7 +90,7 @@
                Events Abonnieren
             </a>
             <span class="mx-1">/</span>
-            <a class="text-decoration-none" href="https://calendar.google.com/calendar/r?cid=https://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
+            <a class="text-decoration-none" href="https://calendar.google.com/calendar/r?cid=http://{{ request.get_host }}{% url 'download_bar_events_ics' bar_id=bar.id %}">
                mit Google
             </a>
             <!-- @formatter:on -->
