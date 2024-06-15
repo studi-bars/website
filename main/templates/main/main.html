@@ -213,7 +213,10 @@
                               <h5 class="text-nowrap text-black">{{ bar.name }}</h5>
                             </div>`,
                             text: `<h5 class="mb-1">{{ bar.name }}</h5><p class="m-0">{{ bar.open_text }}</p>
-                                <button href="#" class="btn btn-sm btn-primary mt-2" onclick="openInMaps({{ bar.latitude|unlocalize }}, {{ bar.longitude|unlocalize }})">Open in Maps</button>`
+                                <a target="_blank" class="btn btn-sm btn-primary mt-2 text-white"
+                                   href="https://maps.google.com/?q={{ bar.name }}, {{ bar.street }}, {{ bar.zip_code }} {{ bar.city }}">
+                                    Open in Google Maps
+                                </a>`
                         },
                     {% endif %}
                 {% endfor %}
@@ -229,15 +232,6 @@
                 });
                 L.marker(marker.position, {icon}).addTo(map).bindPopup(marker.text);
             });
-        }
-
-        function openInMaps(lat, lng) {
-            const platform = navigator.platform.toLowerCase();
-            if (platform.indexOf("iphone") !== -1 || platform.indexOf("ipad") !== -1) {
-                window.open("maps://maps.apple.com/?q=" + lat + "," + lng);
-            } else {
-                window.open("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng);
-            }
         }
     </script>
     <script async fetchpriority="low" onload="createMap()"
