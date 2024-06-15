@@ -213,8 +213,8 @@ class EventFilter(FilterSet):
         fields = {
             'name': ['iexact', 'icontains'],
             'description': ['icontains'],
-            'start_date': ['date', 'date__lte', 'date__gte', 'lt', 'lte', 'gt', 'gte'],
-            'end_date': ['date', 'date__lte', 'date__gte', 'lt', 'lte', 'gt', 'gte'],
+            'start_date': ['date', 'date__lt', 'date__lte', 'date__gte', 'date__gt', 'lt', 'lte', 'gt', 'gte'],
+            'end_date': ['date', 'date__lt', 'date__lte', 'date__gte', 'date__gt', 'lt', 'lte', 'gt', 'gte'],
             'bar': ['exact'],
             'bar__name': ['iexact', 'icontains'],
         }
