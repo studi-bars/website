@@ -193,6 +193,8 @@ class BarFilter(FilterSet):
     class Meta:
         model = Bar
         fields = {
+            'created_at': ['exact', 'lt', 'lte', 'gt', 'gte'],
+            'updated_at': ['exact', 'lt', 'lte', 'gt', 'gte'],
             'name': ['iexact', 'icontains'],
             'description': ['icontains'],
             'day': ['exact', 'lt', 'lte', 'gt', 'gte'],
@@ -211,6 +213,8 @@ class EventFilter(FilterSet):
     class Meta:
         model = Event
         fields = {
+            'created_at': ['exact', 'lt', 'lte', 'gt', 'gte'],
+            'updated_at': ['exact', 'lt', 'lte', 'gt', 'gte'],
             'name': ['iexact', 'icontains'],
             'description': ['icontains'],
             'start_date': ['date', 'date__lt', 'date__lte', 'date__gte', 'date__gt', 'lt', 'lte', 'gt', 'gte'],
