@@ -6,7 +6,7 @@
         </span>
         <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}
             <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}">
-                <i class="bi bi-calendar-plus align-top"></i>
+                <i class="bi bi-calendar-plus align-top ms-1"></i>
             </a>
         </span>
     </div>
