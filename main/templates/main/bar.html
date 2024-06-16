@@ -117,7 +117,7 @@
                     <h6 class="text-secondary mb-0 mt-3 mt-sm-0"> {{ event.start_date }} </h6>
                     <h2> {{ event.name }}</h2>
                     {% if event.description %}
-                        <p>{{ event.description }}</p>
+                        <p>{{ event.description|linebreaksbr }}</p>
                     {% endif %}
                     <div class="position-relative mt-auto left-0 bottom-0">
                         <a type="button" class="btn btn-dark" href="{% url 'download_event_ics' event_id=event.id %}">
