@@ -72,11 +72,11 @@ def main_view(request):
     bars = []
     for day in Weekday.choices[:-3]:
         bars.append((day[1], bars_by_weekday[day[0]]))
-    now = datetime.datetime.now()
     events = Event.objects.filter(start_date__gte=datetime.date.today())
     for event in events:
         json_ld.append(event.to_json_ld())
     # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
+    now = datetime.datetime.now()
     if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
         events = events.exclude(bar__name__icontains="symposion")
     return render(request, 'main/main.html', {
@@ -99,6 +99,10 @@ def bar_view(request, bar_id, name):
     events = bar.event_set.filter(start_date__gte=datetime.date.today())
     for event in events:
         json_ld.append(event.to_json_ld())
+    # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
+    now = datetime.datetime.now()
+    if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
+        events = events.exclude(bar__name__icontains="symposion")
     return render(request, 'main/bar.html', {
         'title': bar.name,
         'json_ld': mark_safe(json.dumps(json_ld)),
