@@ -109,6 +109,7 @@ def bar_view(request, bar_id, name):
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'bar': bar,
         'events': events.order_by('start_date'),
+        'content_description': bar.description,
     })
 
 
