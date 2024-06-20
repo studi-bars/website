@@ -44,6 +44,14 @@
             }
         }
     }
+
+    /* CSS Fix from https://github.com/orgs/twbs/discussions/38789 */
+    [data-bs-theme="light"] .carousel .carousel-control-prev-icon,
+    [data-bs-theme="light"] .carousel .carousel-control-next-icon,
+    [data-bs-theme="light"].carousel .carousel-control-prev-icon,
+    [data-bs-theme="light"].carousel .carousel-control-next-icon {
+        filter: none;
+    }
 </style>
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
