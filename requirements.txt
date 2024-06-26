@@ -4,6 +4,7 @@ Pillow # For ImageField
 djangorestframework
 drf-spectacular
 django-filter
+setuptools
 ics # für ics calendar
 django-imagekit # um im template thumbnails zu generieren https://github.com/matthewwithanm/django-imagekit
 # See https://github.com/zelenij/django-bootstrap-v5/issues/33
