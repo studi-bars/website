@@ -119,13 +119,7 @@
                                 <text x="38%" y="50%" fill="#dee2e6" dy=".3em">Placeholder</text>
                             </svg>
                         {% else %}
-                            {% generateimage 'studibars:thumbnail1x' source=bar.image as thumb1 %}
-                            {% generateimage 'studibars:thumbnail1_5x' source=bar.image as thumb1_5 %}
-                            {% generateimage 'studibars:thumbnail2x' source=bar.image as thumb2 %}
-                            <img alt="Bild {{ bar.name }}" src="{{ thumb1.url }}"
-                                 srcset="{{ thumb1.url }}, {{ thumb1_5.url }} 1.5x, {{ thumb2.url }} 2x"
-                                 width="{{ thumb1.width }}" height="{{ thumb1.height }}"
-                                 class="card-img-top object-fit-cover" loading="lazy">
+                            {% thumbnail '318x180' bar.image -- alt=bar.name class="card-img-top object-fit-cover" loading="lazy" %}
                         {% endif %}
                         <div class="card-body">
                             <h6 class="card-title d-flex align-items-baseline mb-1">

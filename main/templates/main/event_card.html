@@ -11,14 +11,7 @@
         </span>
     </div>
     {% if event.poster %}
-        {% generateimage 'studibars:poster1x' source=event.poster as img1 %}
-        {% generateimage 'studibars:poster1_5x' source=event.poster as img1_5 %}
-        {% generateimage 'studibars:poster2x' source=event.poster as img2 %}
-        <img alt="Bild {{ event.name }}" src="{{ img1.url }}"
-             srcset="{{ img1.url }}, {{ img1_5.url }} 1.5x, {{ img2.url }} 2x"
-             width="{{ img1.width }}" height="{{ img1.height }}"
-             class="w-100 h-auto" loading="lazy"
-        >
+        {% thumbnail '318x450' event.poster -- alt=event.name class="w-100 h-auto" loading="lazy" %}
     {% endif %}
     {% if event.description or not event.poster %}
         <div class="card-body">
