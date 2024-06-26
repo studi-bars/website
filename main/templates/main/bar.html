@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load imagekit %}
 
 {% block content %}
     <div class="container px-0 col-11 col-lg-8">
@@ -11,15 +12,11 @@
                     <div id="carouselExample" class="carousel slide" data-bs-theme="light">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img style="height: 400px" src="{{ bar.image.url }}"
-                                     class="d-block w-100 object-fit-cover"
-                                     alt="{{ bar.name }}">
+                                {% thumbnail 'x400' bar.image -- alt=bar.name style="height: 400px" class="d-block w-100 object-fit-cover" %}
                             </div>
                             {% for image in bar.images.all %}
                                 <div class="carousel-item">
-                                    <img style="height: 400px" src="{{ image.image.url }}"
-                                         class="d-block w-100 object-fit-cover"
-                                         alt="{{ bar.name }}">
+                                    {% thumbnail 'x400' image.image -- alt=bar.name style="height: 400px" class="d-block w-100 object-fit-cover" %}
                                 </div>
                             {% endfor %}
                         </div>

@@ -150,3 +150,6 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
+
+IMAGEKIT_DEFAULT_THUMBNAIL_FORMAT = "WEBP"
+IMAGEKIT_DEFAULT_THUMBNAIL_SRCSET_SCALES = [2, 3]
