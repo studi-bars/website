@@ -35,6 +35,7 @@ CSRF_TRUSTED_ORIGINS = [f"https://{prefix}studibars{postfix}.de" for prefix in [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "main",
     "nested_admin",
     "bootstrap5",
@@ -79,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "studibars.wsgi.application"
+ASGI_APPLICATION = 'studibars.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -153,3 +155,22 @@ REST_FRAMEWORK = {
 
 IMAGEKIT_DEFAULT_THUMBNAIL_FORMAT = "WEBP"
 IMAGEKIT_DEFAULT_THUMBNAIL_SRCSET_SCALES = [2, 3]
+
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT', 6379)
+
+if REDIS_HOST:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [(REDIS_HOST, REDIS_PORT)],
+            },
+        },
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
