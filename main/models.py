@@ -1,5 +1,10 @@
 from datetime import timedelta
 
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from .consumers import CHANNEL_GROUP_NAME
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -209,3 +214,38 @@ class Event(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=Event)
+def event_saved(sender, instance, created, **kwargs):
+    channel_layer = get_channel_layer()
+    event_type = 'created' if created else 'updated'
+    from .serializers import EventSerializer
+    data = EventSerializer(instance).data
+    async_to_sync(channel_layer.group_send)(
+        CHANNEL_GROUP_NAME,
+        {
+            'type': 'event_notification',
+            'event': {
+                'type': event_type,
+                'data': data
+            }
+        }
+    )
+
+
+@receiver(post_delete, sender=Event)
+def event_deleted(sender, instance, **kwargs):
+    channel_layer = get_channel_layer()
+    from .serializers import EventSerializer
+    data = EventSerializer(instance).data
+    async_to_sync(channel_layer.group_send)(
+        CHANNEL_GROUP_NAME,
+        {
+            'type': 'event_notification',
+            'event': {
+                'type': 'deleted',
+                'data': data
+            }
+        }
+    )
