@@ -163,6 +163,7 @@ class BarImage(TimeStampedModel):
 class Event(TimeStampedModel):
     name = models.CharField(max_length=254)
     description = models.TextField(null=True, blank=True)
+    emoji = models.CharField(max_length=8, null=True, blank=True)
     bar = models.ForeignKey(Bar, on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
