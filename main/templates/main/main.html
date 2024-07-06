@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="mb-4" style="position: relative; height: 400px">
-        <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px"
+        <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px" alt=""
              src="/static/hero/hero-400.webp"
              srcset="/static/hero/hero-400.webp, /static/hero/hero-600.webp 1.5x, /static/hero/hero-800.webp 2x, /static/hero/hero-1000.webp 2.5x, /static/hero/hero-1200.webp 3x"
         >
@@ -125,7 +125,8 @@
                             <h6 class="card-title d-flex align-items-baseline mb-1">
                                 <i class="bi bi-arrow-repeat mx-2"></i> {{ bar.open_text }}
                                 <!-- @formatter:off -->
-                                <a class="mx-2" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}">
+                                <a class="mx-2" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}"
+                                   aria-label="Kalender abonnieren ({{ bar.name }})">
                                     <i class="bi bi-calendar-plus align-top"></i>
                                 </a>
                                 <!-- @formatter:on -->

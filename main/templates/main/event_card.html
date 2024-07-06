@@ -5,7 +5,8 @@
             <a class="text-reset text-decoration-none" href="{{ event.bar.url_path }}">{{ event.bar.name }}</a>
         </span>
         <span>{{ event.start_date|date:"d.m." }} ab {{ event.start_date|date:"H:i" }}
-            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}">
+            <a class="align-middle" href="{% url 'download_event_ics' event_id=event.id %}"
+               aria-label="Download Event (ICS File) for {{ event.name }}">
                 <i class="bi bi-calendar-plus align-top ms-1"></i>
             </a>
         </span>
