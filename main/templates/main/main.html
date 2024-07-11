@@ -4,7 +4,8 @@
 
 {% block content %}
     <div class="mb-4" style="position: relative; height: 400px">
-        <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px" alt=""
+        <img class="w-100 d-absolute object-fit-cover mb-3" style="position: absolute; opacity: 80%" height="400px"
+             alt=""
              src="/static/hero/hero-400.webp"
              srcset="/static/hero/hero-400.webp, /static/hero/hero-600.webp 1.5x, /static/hero/hero-800.webp 2x, /static/hero/hero-1000.webp 2.5x, /static/hero/hero-1200.webp 3x"
         >
@@ -234,23 +235,10 @@
     <script async fetchpriority="low" onload="createMap()"
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <div class="row" id="events">
+    <div id="events" class="container px-0 col-12 col-lg-9 pt-lg-3">
         {% for event in events %}
-            <div class="col-sm-6 col-lg-4 mb-4" id="event-{{ event.id }}">
-                {% include "./event_card.html" %}
-            </div>
+            <div id="event-{{ event.id }}"></div>
+            {% include "./event_big_card.html" %}
         {% endfor %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
-            integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
-    ></script>
-    <script>
-        const el = document.getElementById("events");
-        const msnry = new Masonry(el, {
-            percentPosition: true,
-        });
-        for (let e of document.getElementsByTagName("img")) {
-            e.onload = () => msnry.layout();
-        }
-    </script>
 {% endblock %}
