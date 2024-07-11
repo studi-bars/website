@@ -80,6 +80,7 @@ def event_view(request, event_id, name):
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
         'event': event,
+        'content_description': event.description,
     })
 
 
