@@ -67,6 +67,7 @@ def bar_view(request, bar_id, name):
         'bar': bar,
         'events': events.order_by('start_date'),
         'content_description': bar.description,
+        'is_android': "Android" in request.META.get("HTTP_USER_AGENT", ""),
     })
 
 

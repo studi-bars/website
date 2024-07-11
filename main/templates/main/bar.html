@@ -87,15 +87,41 @@
         {% endif %}
         <div class="d-flex align-items-baseline mb-2">
             <i class="bi bi-calendar-event me-2"></i>
-            <!-- @formatter:off -->
-            <a class="text-decoration-none" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}">
-               Events Abonnieren
-            </a>
+            {% if is_android %}
+                <a class="text-decoration-none" href="http://{{ request.get_host }}{{ bar.ics_url_path }}"
+                   onclick="copyLink(event, this.href)">
+                    Event Abo Link kopieren
+                </a>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="toastMessage" class="toast text-center border-0 toast-body" role="alert"
+                         aria-live="assertive"
+                         aria-atomic="true">
+                    </div>
+                </div>
+                <script>
+                    function copyLink(event, href) {
+                        event.preventDefault();
+                        const toastMessage = document.getElementById('toastMessage');
+                        const toast = new bootstrap.Toast(toastMessage, {delay: 5000});
+                        navigator.clipboard.writeText(href).then(function () {
+                            toastMessage.innerText = "Link kopiert! Mit Kalenderapp abonnieren"
+                            toast.show();
+                        }).catch(function (error) {
+                            toastMessage.innerText = "Failed to copy Link!"
+                            toast.show();
+                        });
+                    }
+                </script>
+            {% else %}
+                <a class="text-decoration-none" href="webcal://{{ request.get_host }}{{ bar.ics_url_path }}">
+                    Events Abonnieren
+                </a>
+            {% endif %}
             <span class="mx-1">/</span>
-            <a class="text-decoration-none" href="https://calendar.google.com/calendar/r?cid=http://{{ request.get_host }}{{ bar.ics_url_path }}">
-               mit Google
+            <a class="text-decoration-none"
+               href="https://calendar.google.com/calendar/r?cid=http://{{ request.get_host }}{{ bar.ics_url_path }}">
+                mit Google
             </a>
-            <!-- @formatter:on -->
         </div>
 
     </div>
