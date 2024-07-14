@@ -121,6 +121,11 @@ class Bar(TimeStampedModel):
     def ics_url_path(self):
         return reverse("download_bar_events_ics", args=[f"{slugify(self.name)}-{self.id}"])
 
+    def content_description(self):
+        if self.description:
+            return self.open_text() + " " + self.description
+        return f"{self.open_text()}. Ihr findet uns in der {self.street}."
+
     def to_json_ld(self) -> dict:
         json_ld = {
             "@context": "https://schema.org",
@@ -212,6 +217,11 @@ class Event(TimeStampedModel):
         if self.poster:
             event["image"] = self.poster.url
         return event
+
+    def content_description(self):
+        if self.description:
+            return self.description
+        return f"Am {self.start_date.strftime("%d.%m")} findet im {self.bar.name} die {self.name} statt."
 
     def __str__(self):
         return self.name

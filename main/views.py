@@ -66,7 +66,7 @@ def bar_view(request, bar_id, name):
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'bar': bar,
         'events': events.order_by('start_date'),
-        'content_description': bar.description,
+        'content_description': bar.content_description(),
         'is_android': "Android" in request.META.get("HTTP_USER_AGENT", ""),
     })
 
@@ -81,7 +81,7 @@ def event_view(request, event_id, name):
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
         'event': event,
-        'content_description': event.description,
+        'content_description': event.content_description(),
     })
 
 
