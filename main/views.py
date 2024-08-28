@@ -90,7 +90,7 @@ def event_view(request, event_id, name, bar=""):
     except Event.DoesNotExist:
         raise Http404
     return render(request, 'main/event.html', {
-        'title': f"{event.bar.name} - {event.name} - {event.start_date.date()}",
+        'title': f"{event.bar.name} - {event.name} - {event.start_date.date().strftime("%d.%m.%Y")}",
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
         'event': event,
