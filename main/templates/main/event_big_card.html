@@ -13,6 +13,7 @@
         <h6 class="text-secondary mb-0 mt-3 mt-sm-0"> {{ event.start_date }}
             {% if not bar %}
                 - <a class="text-reset text-decoration-none" href="{{ event.bar.url_path }}">{{ event.bar.name }}</a>
+                - <a class="text-reset text-decoration-none" href="{{ event.bar.google_maps_url }}">{{ event.bar.street }}</a>
             {% endif %}
         </h6>
         <h2> {{ event.name }}</h2>

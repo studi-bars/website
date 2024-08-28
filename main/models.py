@@ -124,6 +124,9 @@ class Bar(TimeStampedModel):
     def ics_url_path(self):
         return reverse("download_bar_events_ics", args=[slugify(self.name), self.id])
 
+    def google_maps_url(self):
+        return f"https://maps.google.com/?q={ self.name }, { self.street }, { self.zip_code } { self.city }"
+
     def content_description(self):
         if self.description:
             return self.open_text() + " " + self.description
