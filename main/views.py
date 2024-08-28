@@ -87,8 +87,10 @@ def event_view(request, event_id, name):
 
 def download_event_ics(request, event_id):
     try:
+        print(f"download_event_ics for '{event_id}'")
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
+        print(f"Event with id '{event_id}' does not exist")
         return HttpResponse(status=404)
 
     c = Calendar()
