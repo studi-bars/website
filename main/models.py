@@ -115,11 +115,14 @@ class Bar(TimeStampedModel):
             "addressCountry": "DE",
         }
 
+    def url_slug(self):
+        return self.name.lower().replace(' ', '-')
+
     def url_path(self):
-        return reverse("bar_view", args=[self.id, slugify(self.name)])
+        return reverse("bar_view", args=[self.url_slug()])
 
     def ics_url_path(self):
-        return reverse("download_bar_events_ics", args=[f"{slugify(self.name)}-{self.id}"])
+        return reverse("download_bar_events_ics", args=[slugify(self.name), self.id])
 
     def content_description(self):
         if self.description:
@@ -192,8 +195,14 @@ class Event(TimeStampedModel):
         ics_event.alarms.append(alarm)
         return ics_event
 
+    def _url_slug(self):
+        return slugify(f"{self.name}-{self.start_date.date().strftime('%d-%m-%Y')}")
+
     def url_path(self):
-        return reverse("event_view", args=[self.id, slugify(f"{self.name}-{self.bar.name}-{self.start_date.date()}")])
+        return reverse("event_view", args=[self.bar.url_slug(), self._url_slug(), self.id])
+
+    def ics_url_path(self):
+        return reverse("download_event_ics", args=[self.bar.url_slug(), self._url_slug(), self.id])
 
     def to_json_ld(self) -> dict:
         event = {

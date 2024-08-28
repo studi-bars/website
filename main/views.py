@@ -47,11 +47,24 @@ def main_view(request):
     })
 
 
-def bar_view(request, bar_id, name):
+def bar_view_name(request, name: str):
+    name = name.replace('-', ' ')
+    try:
+        bar = Bar.objects.get(name__iexact=name)
+    except Bar.DoesNotExist:
+        raise Http404
+    return bar_view_base(request, bar)
+
+
+def bar_view_id(request, bar_id, name):
     try:
         bar = Bar.objects.get(id=bar_id)
     except Bar.DoesNotExist:
         raise Http404
+    return bar_view_base(request, bar)
+
+
+def bar_view_base(request, bar: Bar):
     json_ld = [bar.to_json_ld()]
     events = bar.event_set.filter(start_date__gte=datetime.date.today())
     for event in events:
@@ -71,7 +84,7 @@ def bar_view(request, bar_id, name):
     })
 
 
-def event_view(request, event_id, name):
+def event_view(request, event_id, name, bar=""):
     try:
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
@@ -85,12 +98,10 @@ def event_view(request, event_id, name):
     })
 
 
-def download_event_ics(request, event_id):
+def download_event_ics(request, name, event_id, bar):
     try:
-        print(f"download_event_ics for '{event_id}'")
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
-        print(f"Event with id '{event_id}' does not exist")
         return HttpResponse(status=404)
 
     c = Calendar()
@@ -101,7 +112,7 @@ def download_event_ics(request, event_id):
     return response
 
 
-def download_bar_events_ics(request, bar_id):
+def download_bar_events_ics(request, bar_id, name=""):
     try:
         bar = Bar.objects.get(id=bar_id)
     except Event.DoesNotExist:

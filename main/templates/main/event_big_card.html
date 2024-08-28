@@ -1,11 +1,13 @@
 {% load imagekit %}
 <div class="row mb-5 mt-4">
     <div class="col-12 col-sm-6">
-        {% if event.poster %}
-            <img class="w-100" src="{{ event.poster.url }}">
-        {% elif event.bar.image %}
-            <img class="w-100" src="{{ event.bar.image.url }}">
-        {% endif %}
+        <a href="{{ event.url_path }}">
+            {% if event.poster %}
+                <img class="w-100" src="{{ event.poster.url }}">
+            {% elif event.bar.image %}
+                <img class="w-100" src="{{ event.bar.image.url }}">
+            {% endif %}
+        </a>
     </div>
     <div class="col-12 col-sm-6 d-flex flex-column justify-content-start">
         <h6 class="text-secondary mb-0 mt-3 mt-sm-0"> {{ event.start_date }}
@@ -20,7 +22,7 @@
             </div>
         {% endif %}
         <div class="position-relative mt-auto left-0 bottom-0">
-            <a type="button" class="btn btn-dark" href="{% url 'download_event_ics' event_id=event.id %}">
+            <a type="button" class="btn btn-dark" href="{{ event.ics_url_path }}">
                 <i class="bi bi-bookmark"></i> Add to calendar
             </a>
         </div>
