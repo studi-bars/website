@@ -4,6 +4,8 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from ics.grammar.parse import ContentLine
+
 from .consumers import CHANNEL_GROUP_NAME
 from django.contrib.auth.models import User
 from django.db import models
@@ -125,7 +127,7 @@ class Bar(TimeStampedModel):
         return reverse("download_bar_events_ics", args=[slugify(self.name), self.id])
 
     def google_maps_url(self):
-        return f"https://maps.google.com/?q={ self.name }, { self.street }, { self.zip_code } { self.city }"
+        return f"https://maps.google.com/?q={self.name}, {self.street}, {self.zip_code} {self.city}"
 
     def content_description(self):
         if self.description:
@@ -186,12 +188,21 @@ class Event(TimeStampedModel):
         ics_event.begin = self.start_date
         ics_event.end = self.end_date if self.end_date else self.start_date + timedelta(hours=4)
         ics_event.description = self.description
-        ics_event.location = f"{self.bar.street}, {self.bar.zip_code} {self.bar.city}"
+        ics_event.location = f"{self.bar.name}\n{self.bar.street}, {self.bar.zip_code} {self.bar.city}, Germany"
         if self.bar.latitude and self.bar.longitude:
             ics_event.geo = Geo(self.bar.latitude, self.bar.longitude)
         ics_event.status = "CONFIRMED"
         ics_event.uid = f"event-{self.id}@studibars-ac.de"
         ics_event.organizer = Organizer(common_name=self.bar.name, email="noreply@studibars-ac.de")
+        ics_event.extra.append(ContentLine(name="X-APPLE-STRUCTURED-LOCATION",
+                                           params={
+                                               "VALUE": ["URI"],
+                                               "X-ADDRESS": [
+                                                   f"\"{self.bar.name}, {self.bar.street}, {self.bar.zip_code} {self.bar.city}, Germany\""],
+                                               "X-APPLE-RADIUS": ["15"],
+                                               "X-TITLE": [self.bar.name],
+                                           },
+                                           value=f"geo:{self.bar.latitude},{self.bar.longitude}"))
 
         # Add an alarm/reminder
         alarm = DisplayAlarm(trigger=timedelta(days=-1))
