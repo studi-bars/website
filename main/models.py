@@ -194,6 +194,8 @@ class Event(TimeStampedModel):
         ics_event.status = "CONFIRMED"
         ics_event.uid = f"event-{self.id}@studibars-ac.de"
         ics_event.organizer = Organizer(common_name=self.bar.name, email="noreply@studibars-ac.de")
+        ics_event.url = JSON_LD_BASE_URL + self.url_path()
+        ics_event.extra.append(ContentLine(name="ATTACH", value=f"{JSON_LD_BASE_URL}{self.poster.url}"))
         ics_event.extra.append(ContentLine(name="X-APPLE-STRUCTURED-LOCATION",
                                            params={
                                                "VALUE": ["URI"],
