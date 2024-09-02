@@ -37,9 +37,14 @@
     {% endif %}
     <div class="container px-0 col-11 col-lg-8">
         <div class="d-flex align-items-baseline mb-2">
-            <i class="bi bi-arrow-repeat me-2"></i> {{ bar.day_text }}
+            <i class="bi bi-arrow-repeat me-2"></i>
+            {% if bar.temporarily_closed %}
+                <span class="text-decoration-line-through pe-1">{{ bar.day_text }}</span> Temporär geschlossen
+            {% else %}
+                {{ bar.day_text }}
+            {% endif %}
         </div>
-        <div class="d-flex align-items-baseline mb-2">
+        <div class="d-flex align-items-baseline mb-2 {% if bar.temporarily_closed %}text-decoration-line-through{% endif %}">
             <i class="bi bi-clock me-2"></i> ab {{ bar.start_time }}
         </div>
         <div class="d-flex align-items-baseline mb-2">

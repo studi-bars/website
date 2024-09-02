@@ -50,10 +50,10 @@
                                                           href="{{ bar.url_path }}"
                                                           onclick="window.location.href = '{{ bar.url_path }}'">{{ bar.name }}</a>
                                 </h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary d-flex align-items-baseline">
+                                <h6 class="card-subtitle mb-2 text-body-secondary d-flex align-items-baseline {% if bar.temporarily_closed %}text-decoration-line-through{% endif %}">
                                     <i class="bi bi-arrow-repeat me-2"></i> {{ bar.day_text }}
                                 </h6>
-                                <h6 class="card-subtitle text-body-secondary d-flex align-items-baseline">
+                                <h6 class="card-subtitle text-body-secondary d-flex align-items-baseline {% if bar.temporarily_closed %}text-decoration-line-through{% endif %}">
                                     <i class="bi bi-clock me-2"></i> ab {{ bar.start_time }}
                                 </h6>
                             </div>

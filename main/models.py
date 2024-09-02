@@ -72,6 +72,7 @@ class Bar(TimeStampedModel):
     end_time = models.TimeField(null=True, blank=True, help_text="Ungefähres Ende")
     open = models.IntegerField(choices=OpenModel, help_text="Sowas wie jede Woche, 1./3./5. Mittwoch",
                                default=OpenModel.WEEKLY)
+    temporarily_closed = models.BooleanField(default=False)
     image = models.ImageField(upload_to="bars/", blank=True, null=True)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=6)
@@ -100,6 +101,8 @@ class Bar(TimeStampedModel):
         return []
 
     def open_text(self):
+        if self.temporarily_closed:
+            return "Temporär geschlossen"
         text = "Jeden "
         if self.open == self.OpenModel.OPEN_13:
             text += f"{self.OpenModel.OPEN_13.label} "
