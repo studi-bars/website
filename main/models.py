@@ -63,6 +63,8 @@ class Bar(TimeStampedModel):
     name = models.CharField(unique=True, max_length=254)
     description = models.TextField(null=True, blank=True)
     instagram_id = models.CharField(null=True, blank=True, max_length=254)
+    whatsapp = models.URLField(null=True, blank=True, help_text="Whatsapp Gruppe/Newsletter etc")
+    facebook = models.URLField(null=True, blank=True, help_text="Facebook Gruppe/Seite")
     website = models.URLField(null=True, blank=True)
     menu_url = models.URLField(null=True, blank=True)
     day = WeekdayField()

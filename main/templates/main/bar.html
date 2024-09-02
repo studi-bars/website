@@ -69,6 +69,22 @@
             </div>
         {% endif %}
 
+        {% if bar.whatsapp %}
+            <div class="d-flex align-items-baseline mb-2">
+                <i class="bi bi-whatsapp me-2"></i>
+                <a target="_blank" href="{{ bar.whatsapp }}" class="text-decoration-none">
+                    Whatsapp
+                </a>
+            </div>
+        {% endif %}
+        {% if bar.facebook %}
+            <div class="d-flex align-items-baseline mb-2">
+                <i class="bi bi-facebook me-2"></i>
+                <a target="_blank" href="{{ bar.facebook }}" class="text-decoration-none">
+                    Facebook
+                </a>
+            </div>
+        {% endif %}
         {% if bar.website %}
             <div class="d-flex align-items-baseline mb-2">
                 <i class="bi bi-link me-2"></i>

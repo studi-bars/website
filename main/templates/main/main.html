@@ -144,13 +144,27 @@
                                     <span class="badge {% if not forloop.first %} ms-1 {% endif %} rounded-pill text-bg-{{ tag.1 }} mt-2">{{ tag.0 }}</span>
                                 {% endfor %}
                             </p>
-                            {% if bar.instagram_id or bar.website or bar.menu_url %}
+                            {% if bar.instagram_id or bar.whatsapp or bar.facebook or bar.website or bar.menu_url %}
                                 <div class="seperated-by-bar border-top pt-2 px-2">
                                     {% if bar.instagram_id %}
                                         <span>
                                             <a target="_blank" href="https://www.instagram.com/{{ bar.instagram_id }}"
                                                class="text-decoration-none">
                                                 Instagram
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                    {% if bar.whatsapp %}
+                                        <span>
+                                            <a target="_blank" href="{{ bar.whatsapp }}" class="text-decoration-none">
+                                                Whatsapp
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                    {% if bar.facebook %}
+                                        <span>
+                                            <a target="_blank" href="{{ bar.facebook }}" class="text-decoration-none">
+                                                Facebook
                                             </a>
                                         </span>
                                     {% endif %}
