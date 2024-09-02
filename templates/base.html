@@ -16,7 +16,7 @@
     {% bootstrap_css %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="google-site-verification" content="tCBRqO09x3c4t3EzdjSln0DcPjbufFOj6135ULKOQkU"/>
-    <meta name="google-site-verification" content="Lj4deWKwoZ3efh3ULwaCTKaemgKTuz3ZQyo9G6i4KVU" />
+    <meta name="google-site-verification" content="Lj4deWKwoZ3efh3ULwaCTKaemgKTuz3ZQyo9G6i4KVU"/>
     {% if content_description %}
         <meta content="{{ content_description }}"
               name="description">
@@ -73,9 +73,11 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/#">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/#events">Events</a>
-                </li>
+                {% if display_events_menu_entry %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#events">Events</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false">

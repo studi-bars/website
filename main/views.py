@@ -3,6 +3,7 @@ import json
 from collections import defaultdict
 from datetime import timedelta
 
+from django.db.models import QuerySet
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.urls import reverse
@@ -19,7 +20,20 @@ from main.serializers import BarSerializer, EventSerializer
 from studibars.settings import TIME_ZONE
 
 
-# Create your views here.
+def exclude_symposion_events(events: QuerySet):
+    now = datetime.datetime.now()
+    # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
+    if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
+        return events.exclude(bar__name__icontains="symposion")
+    return events
+
+
+def should_display_events_menu_entry():
+    events = Event.objects.filter(start_date__gte=datetime.date.today())
+    events = exclude_symposion_events(events)
+    return events.exists()
+
+
 def main_view(request):
     json_ld = []
     bars_by_weekday = defaultdict(list)
@@ -32,12 +46,10 @@ def main_view(request):
     events = Event.objects.filter(start_date__gte=datetime.date.today())
     for event in events:
         json_ld.append(event.to_json_ld())
-    # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
-    now = datetime.datetime.now()
-    if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
-        events = events.exclude(bar__name__icontains="symposion")
+    events = exclude_symposion_events(events)
     return render(request, 'main/main.html', {
         'title': 'Home',
+        'display_events_menu_entry': should_display_events_menu_entry(),
         'json_ld': mark_safe(json.dumps(json_ld)),
         'weekdays': Weekday.choices[:-3],
         'bars_by_day': bars,
@@ -69,12 +81,10 @@ def bar_view_base(request, bar: Bar):
     events = bar.event_set.filter(start_date__gte=datetime.date.today())
     for event in events:
         json_ld.append(event.to_json_ld())
-    # Check if it's a weekday (Monday=0, ..., Sunday=6) + if the time is between 6:00 and 19:00
-    now = datetime.datetime.now()
-    if 0 <= now.weekday() <= 4 and 6 <= now.hour < 19:
-        events = events.exclude(bar__name__icontains="symposion")
+    events = exclude_symposion_events(events)
     return render(request, 'main/bar.html', {
         'title': bar.name,
+        'display_events_menu_entry': should_display_events_menu_entry(),
         'json_ld': mark_safe(json.dumps(json_ld)),
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'bar': bar,
@@ -91,6 +101,7 @@ def event_view(request, event_id, name, bar=""):
         raise Http404
     return render(request, 'main/event.html', {
         'title': f"{event.bar.name} - {event.name} - {event.start_date.date().strftime("%d.%m.%Y")}",
+        'display_events_menu_entry': should_display_events_menu_entry(),
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
         'event': event,
