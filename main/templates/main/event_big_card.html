@@ -3,9 +3,9 @@
     <div class="col-12 col-sm-6">
         <a href="{{ event.url_path }}">
             {% if event.poster %}
-                {% thumbnail '400x' event.poster -- alt=event.name class="w-100 h-auto" %}
+                {% thumbnail '350x' event.poster -- alt=event.name class="w-100 h-auto" loading="lazy" %}
             {% elif event.bar.image %}
-                {% thumbnail '400x' event.bar.image -- alt=event.name class="w-100 h-auto" %}
+                {% thumbnail '350x' event.bar.image -- alt=event.name class="w-100 h-auto" loading="lazy" %}
             {% endif %}
         </a>
     </div>
