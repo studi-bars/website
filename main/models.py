@@ -58,6 +58,7 @@ class Bar(TimeStampedModel):
     class OpenModel(models.IntegerChoices):
         WEEKLY = 1, 'Weekly'
         OPEN_135 = 2, '1. 3. 5.'
+        OPEN_13 = 3, '1. und 3.'
 
     name = models.CharField(unique=True, max_length=254)
     description = models.TextField(null=True, blank=True)
@@ -98,12 +99,16 @@ class Bar(TimeStampedModel):
 
     def open_text(self):
         text = "Jeden "
-        if self.open == self.OpenModel.OPEN_135:
+        if self.open == self.OpenModel.OPEN_13:
+            text += f"{self.OpenModel.OPEN_13.label} "
+        elif self.open == self.OpenModel.OPEN_135:
             text += f"{self.OpenModel.OPEN_135.label} "
         text += f"{self.get_day_display()} ab {formats.localize(self.start_time)}"
         return text
 
     def day_text(self):
+        if self.open == self.OpenModel.OPEN_13:
+            return "1. und 3. " + self.get_day_display()
         if self.open == self.OpenModel.OPEN_135:
             return "1., 3. & 5. " + self.get_day_display()
         return "Wöchentlich"
