@@ -106,7 +106,7 @@
                 </a>
             </div>
         {% endif %}
-        <div class="d-flex align-items-baseline mb-2">
+        <div id="events" class="d-flex align-items-baseline mb-2">
             <i class="bi bi-calendar-event me-2"></i>
             {% if is_android %}
                 <a class="text-decoration-none" href="http://{{ request.get_host }}{{ bar.ics_url_path }}"
