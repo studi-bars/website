@@ -83,6 +83,7 @@ def bar_view_base(request, bar: Bar):
         json_ld.append(event.to_json_ld())
     events = exclude_symposion_events(events)
     return render(request, 'main/bar.html', {
+        'canonical_url': bar.url_path(),
         'title': bar.name,
         'display_events_menu_entry': should_display_events_menu_entry(),
         'json_ld': mark_safe(json.dumps(json_ld)),
@@ -100,6 +101,7 @@ def event_view(request, event_id, name, bar=""):
     except Event.DoesNotExist:
         raise Http404
     return render(request, 'main/event.html', {
+        'canonical_url': event.url_path(),
         'title': f"{event.bar.name} - {event.name} - {event.start_date.date().strftime("%d.%m.%Y")}",
         'display_events_menu_entry': should_display_events_menu_entry(),
         'bars': Bar.objects.all().order_by('day', 'start_time'),

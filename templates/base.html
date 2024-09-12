@@ -11,6 +11,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
+    {% if canonical_url %}
+        <link rel="canonical" href="{{ canonical_url }}"/>
+    {% endif %}
 
     <title>Studibars Aachen - {{ title }}</title>
     {% bootstrap_css %}
