@@ -1,4 +1,5 @@
 {% load imagekit %}
+{% load markdown_filter %}
 <div class="row mb-5 mt-4">
     <div class="col-12 col-sm-6">
         <a href="{{ event.url_path }}">
@@ -19,7 +20,7 @@
         <h2> {{ event.name }}</h2>
         {% if event.description %}
             <div class="event-description">
-                {{ event.description|linebreaks }}
+                {{ event.description | markdown }}
             </div>
         {% endif %}
         <div class="position-relative mt-auto left-0 bottom-0">
