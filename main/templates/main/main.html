@@ -244,6 +244,23 @@
                 L.marker(marker.position, {icon}).addTo(map).bindPopup(marker.text);
             });
         }
+
+        setTimeout(() => {
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Check if the query parameter 'q' is equal to '3'
+            if (getQueryParam('q') === '3') {
+                // Scroll to the div with ID 'event-17'
+                const element = document.getElementById('event-17');
+                console.log("test", element)
+                if (element) {
+                    element.scrollIntoView({behavior: 'smooth'});
+                }
+            }
+        }, 200)
     </script>
     <script async fetchpriority="low" onload="createMap()"
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
