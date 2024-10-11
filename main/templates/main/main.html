@@ -254,8 +254,10 @@
             // Check if the query parameter 'q' is equal to '3'
             if (getQueryParam('q') === '3') {
                 // Scroll to the div with ID 'event-17'
-                const element = document.getElementById('event-17');
-                console.log("test", element)
+                let element = document.getElementById('event-17');
+                if (!element) {
+                    element = document.getElementById('events');
+                }
                 if (element) {
                     element.scrollIntoView({behavior: 'smooth'});
                 }
