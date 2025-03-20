@@ -14,6 +14,9 @@
     {% if canonical_url %}
         <link rel="canonical" href="{{ canonical_url }}"/>
     {% endif %}
+    {% if no_index %}
+        <meta name="robots" content="noindex">
+    {% endif %}
 
     <title>Studibars Aachen - {{ title }}</title>
     {% bootstrap_css %}

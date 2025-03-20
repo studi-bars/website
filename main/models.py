@@ -192,6 +192,7 @@ class Event(TimeStampedModel):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
     poster = models.FileField(upload_to="events/", null=True, blank=True)
+    no_index = models.BooleanField(default=False, help_text="Exclude this event from the google search index")
 
     def to_ics_event(self) -> IcsEvent:
         ics_event = IcsEvent()

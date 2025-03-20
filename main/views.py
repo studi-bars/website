@@ -45,7 +45,8 @@ def main_view(request):
         bars.append((day[1], bars_by_weekday[day[0]]))
     events = Event.objects.filter(start_date__gte=datetime.date.today())
     for event in events:
-        json_ld.append(event.to_json_ld())
+        if not event.no_index:
+            json_ld.append(event.to_json_ld())
     events = exclude_symposion_events(events)
     return render(request, 'main/main.html', {
         'title': 'Home',
@@ -80,7 +81,8 @@ def bar_view_base(request, bar: Bar):
     json_ld = [bar.to_json_ld()]
     events = bar.event_set.filter(start_date__gte=datetime.date.today())
     for event in events:
-        json_ld.append(event.to_json_ld())
+        if not event.no_index:
+            json_ld.append(event.to_json_ld())
     events = exclude_symposion_events(events)
     return render(request, 'main/bar.html', {
         'canonical_url': bar.url_path(),
@@ -108,6 +110,7 @@ def event_view(request, event_id, name, bar=""):
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
         'event': event,
         'content_description': event.content_description(),
+        'no_index': event.no_index,
     })
 
 
@@ -161,7 +164,7 @@ def robots(request):
 def sitemap(request):
     sites = []
     now = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    for event in Event.objects.all():
+    for event in Event.objects.filter(no_index=False):
         if event.start_date < now:
             prio = 0
         elif event.start_date < now + timedelta(days=10):
