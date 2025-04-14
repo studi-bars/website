@@ -237,7 +237,7 @@ class Event(TimeStampedModel):
             # Only use the Bar end time if the event starts as usual
             if is_time_within_range(self.bar.start_time, self.start_date, tolerance_hours=2):
                 end_date = self.start_date + timedelta(days=1)
-                return datetime.combine(end_date.date(), self.bar.end_time)
+                return datetime.combine(end_date.date(), self.bar.end_time, tzinfo=self.start_date.tzinfo)
         return self.start_date + timedelta(hours=4)
 
     def to_ics_event(self) -> IcsEvent:
