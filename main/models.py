@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from os.path import splitext
 
 from django.db.models.signals import post_save, post_delete
@@ -184,6 +184,42 @@ class BarImage(TimeStampedModel):
         ordering = ['order', 'id']
 
 
+def is_time_within_range(target_time: datetime.time, check_datetime:datetime, tolerance_hours=2):
+    """
+    Check if a datetime has the same time as the target time within a tolerance of ±tolerance_hours.
+
+    Args:
+        target_time (datetime.time): The target time to compare against
+        check_datetime (datetime.datetime): The datetime to check
+        tolerance_hours (int): The tolerance in hours (default is 2)
+
+    Returns:
+        bool: True if the time part of check_datetime is within ±tolerance_hours of target_time
+    """
+    # Extract the time part from the datetime
+    check_time = check_datetime.time()
+
+    # Convert times to minutes since midnight for easier comparison
+    target_minutes = target_time.hour * 60 + target_time.minute
+    check_minutes = check_time.hour * 60 + check_time.minute
+
+    # Calculate the tolerance in minutes
+    tolerance_minutes = tolerance_hours * 60
+
+    # Handle the case when we're comparing across midnight
+    if abs(check_minutes - target_minutes) <= tolerance_minutes:
+        return True
+
+    # Check if we're within tolerance but across midnight boundary
+    day_minutes = 24 * 60
+    if abs(check_minutes - target_minutes - day_minutes) <= tolerance_minutes:
+        return True
+    if abs(check_minutes - target_minutes + day_minutes) <= tolerance_minutes:
+        return True
+
+    return False
+
+
 class Event(TimeStampedModel):
     name = models.CharField(max_length=254)
     description = models.TextField(null=True, blank=True)
@@ -194,11 +230,21 @@ class Event(TimeStampedModel):
     poster = models.FileField(upload_to="events/", null=True, blank=True)
     no_index = models.BooleanField(default=False, help_text="Exclude this event from the google search index")
 
+    def get_end_date_not_null(self):
+        if self.end_date:
+            return self.end_date
+        if self.bar.end_time:
+            # Only use the Bar end time if the event starts as usual
+            if is_time_within_range(self.bar.start_time, self.start_date, tolerance_hours=2):
+                end_date = self.start_date + timedelta(days=1)
+                return datetime.combine(end_date.date(), self.bar.end_time)
+        return self.start_date + timedelta(hours=4)
+
     def to_ics_event(self) -> IcsEvent:
         ics_event = IcsEvent()
         ics_event.name = self.name
         ics_event.begin = self.start_date
-        ics_event.end = self.end_date if self.end_date else self.start_date + timedelta(hours=4)
+        ics_event.end = self.get_end_date_not_null()
         ics_event.description = self.description
         ics_event.location = f"{self.bar.name}\n{self.bar.street}, {self.bar.zip_code} {self.bar.city}, Germany"
         if self.bar.latitude and self.bar.longitude:
@@ -242,7 +288,7 @@ class Event(TimeStampedModel):
             "name": self.name,
             "description": self.description,
             "startDate": str(self.start_date),
-            "endDate": str(self.end_date or self.start_date + timedelta(hours=5)),
+            "endDate": str(self.get_end_date_not_null()),
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
             "location": {
