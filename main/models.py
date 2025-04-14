@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime
 from os.path import splitext
+from zoneinfo import ZoneInfo
 
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -237,7 +238,7 @@ class Event(TimeStampedModel):
             # Only use the Bar end time if the event starts as usual
             if is_time_within_range(self.bar.start_time, self.start_date, tolerance_hours=2):
                 end_date = self.start_date + timedelta(days=1)
-                return datetime.combine(end_date.date(), self.bar.end_time, tzinfo=self.start_date.tzinfo)
+                return datetime.combine(end_date.date(), self.bar.end_time, tzinfo=ZoneInfo("Europe/Berlin"))
         return self.start_date + timedelta(hours=4)
 
     def to_ics_event(self) -> IcsEvent:
