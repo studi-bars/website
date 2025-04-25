@@ -1,6 +1,7 @@
 services:
   web:
     image: ghcr.io/studi-bars/website/django-app:main
+    restart: unless-stopped
     build:
       context: .
     volumes:
@@ -26,6 +27,7 @@ services:
 
   db:
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: django
       POSTGRES_PASSWORD: studi-bars
@@ -35,11 +37,13 @@ services:
 
   redis:
     image: redis:latest
+    restart: unless-stopped
     expose:
       - 6379
 
   nginx:
     image: ghcr.io/studi-bars/website/nginx:main
+    restart: unless-stopped
     build: ./nginx
     volumes:
       - static_volume:/app/staticfiles
