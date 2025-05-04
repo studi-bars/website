@@ -173,9 +173,9 @@ def sitemap(request):
             prio = .8
         else:
             prio = .5
-        sites.append((prio, request.build_absolute_uri(event.url_path())))
+        sites.append((prio, request.build_absolute_uri(event.url_path()), event.updated_at))
     for bar in Bar.objects.all():
-        sites.append((.5, request.build_absolute_uri(bar.url_path())))
+        sites.append((.5, request.build_absolute_uri(bar.url_path()), bar.updated_at))
     return render(request, 'main/sitemap.xml', {
         'sites': sites,
     }, content_type='application/xml; charset=utf-8')

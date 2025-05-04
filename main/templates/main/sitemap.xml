@@ -5,6 +5,7 @@
         <url>
             <loc>{{ site.1 }}</loc>
             <priority>{{ site.0|unlocalize }}</priority>
+            <lastmod>{{ site.2|date:"c" }}</lastmod>
         </url>
     {% endfor %}
 </urlset> 
