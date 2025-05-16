@@ -43,7 +43,7 @@ def main_view(request):
     bars = []
     for day in Weekday.choices[:-3]:
         bars.append((day[1], bars_by_weekday[day[0]]))
-    events = Event.objects.filter(start_date__gte=datetime.date.today())
+    events = Event.objects.filter(start_date__gte=timezone.now() - timedelta(hours=8))
     for event in events:
         if not event.no_index:
             json_ld.append(event.to_json_ld())
@@ -79,7 +79,7 @@ def bar_view_id(request, bar_id, name):
 
 def bar_view_base(request, bar: Bar):
     json_ld = [bar.to_json_ld()]
-    events = bar.event_set.filter(start_date__gte=datetime.date.today())
+    events = bar.event_set.filter(start_date__gte=timezone.now() - timedelta(hours=8))
     for event in events:
         if not event.no_index:
             json_ld.append(event.to_json_ld())
