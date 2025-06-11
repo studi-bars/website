@@ -1,10 +1,10 @@
 from time import timezone
 
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import SimpleListFilter, TabularInline
 from django.utils import timezone
 
-from main.models import Bar, Event, BarImage
+from main.models import Bar, Event, BarImage, SpecialDrink
 
 
 class BarImageInline(admin.TabularInline):
@@ -47,8 +47,13 @@ class FutureEventsFilter(SimpleListFilter):
         return queryset
 
 
+class SpecialDrinkInline(TabularInline):
+    model = SpecialDrink
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'bar')
     ordering = ('start_date',)
     list_filter = ('bar', FutureEventsFilter,)
+    inlines = [SpecialDrinkInline]

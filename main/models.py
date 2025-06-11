@@ -347,3 +347,16 @@ def event_deleted(sender, instance, **kwargs):
             }
         }
     )
+
+
+class SpecialDrink(models.Model):
+    name = models.CharField(max_length=50)
+    price = models.IntegerField(default=1)
+    quantity = models.IntegerField(default=1)
+    ingredients = models.CharField(max_length=512, null=True, blank=True)
+    note = models.CharField(max_length=20, null=True, blank=True,
+                            help_text='z.B. "ab 22 Uhr", "von 23 bis 01 Uhr", "bis Mitternacht"')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="special_drinks")
+
+    def __str__(self):
+        return self.name
