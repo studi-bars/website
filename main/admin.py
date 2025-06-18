@@ -54,6 +54,6 @@ class SpecialDrinkInline(TabularInline):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'bar')
-    ordering = ('start_date',)
+    ordering = ('-start_date',)
     list_filter = ('bar', FutureEventsFilter,)
     inlines = [SpecialDrinkInline]
