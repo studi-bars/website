@@ -104,7 +104,7 @@ def event_view(request, event_id, name, bar=""):
         raise Http404
     return render(request, 'main/event.html', {
         'canonical_url': event.url_path(),
-        'title': f"{event.bar.name} - {event.name} - {event.start_date.date().strftime("%d.%m.%Y")}",
+        'title': f"{event.name} - {event.bar.name} - {event.start_date.date().strftime("%d.%m.%Y")}",
         'display_events_menu_entry': should_display_events_menu_entry(),
         'bars': Bar.objects.all().order_by('day', 'start_time'),
         'json_ld': mark_safe(json.dumps(event.to_json_ld())),
