@@ -27,12 +27,14 @@
             <a type="button" class="btn btn-dark" href="{{ event.ics_url_path }}">
                 <i class="bi bi-bookmark"></i> Add to calendar
             </a>
+            {% comment "not enough horizontal space" %}
             {% if event.bar.instagram_id %}
                 <a type="button" class="btn btn-dark" target="_blank"
                    href="https://www.instagram.com/{{ event.bar.instagram_id }}">
                     <i class="bi bi-instagram"></i>
                 </a>
             {% endif %}
+            {% endcomment %}
             {% if event.bar.whatsapp %}
                 <a type="button" class="btn btn-dark" target="_blank"
                    href="{{ event.bar.whatsapp }}">
@@ -44,6 +46,13 @@
                    href="{{ event.bar.menu_url }}"
                    title="Getränkekarte">
                     <i class="bi bi-file-text"></i>
+                </a>
+            {% endif %}
+            {% if event.bar.google_maps_url %}
+                <a type="button" class="btn btn-dark" target="_blank"
+                   href="{{ event.bar.google_maps_url }}"
+                   title="Google Maps">
+                    <i class="bi bi-pin-map"></i>
                 </a>
             {% endif %}
         </div>
