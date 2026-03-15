@@ -6,6 +6,7 @@ drf-spectacular
 django-filter
 setuptools
 ics # für ics calendar
+tatsu<=5.17.0 # see https://github.com/neogeny/TatSu/issues/412
 # django-imagekit # um im template thumbnails zu generieren https://github.com/matthewwithanm/django-imagekit
 # Mit https://github.com/matthewwithanm/django-imagekit/pull/574 und https://github.com/matthewwithanm/django-imagekit/pull/575 :
 git+https://github.com/autoantwort/django-imagekit@068a9f087dedcc1e60ec55137b12edccfb503be5#egg=django-imagekit
