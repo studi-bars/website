@@ -17,6 +17,7 @@ class BarImageInline(admin.TabularInline):
 @admin.register(Bar)
 class BarAdmin(admin.ModelAdmin):
     inlines = [BarImageInline]
+    search_fields = ('name',)
 
 
 class FutureEventsFilter(SimpleListFilter):
@@ -56,4 +57,5 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'bar')
     ordering = ('-start_date',)
     list_filter = ('bar', FutureEventsFilter,)
+    search_fields = ('name',)
     inlines = [SpecialDrinkInline]
