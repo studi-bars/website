@@ -230,6 +230,7 @@ class Event(TimeStampedModel):
     end_date = models.DateTimeField(null=True, blank=True)
     poster = models.FileField(upload_to="events/", null=True, blank=True)
     no_index = models.BooleanField(default=False, help_text="Exclude this event from the google search index")
+    recurring = models.BooleanField(default=False, help_text="Removes the Date from the URL. You have to update the date at every recurrence.")
 
     def get_end_date_not_null(self):
         if self.end_date:
@@ -274,6 +275,8 @@ class Event(TimeStampedModel):
         return ics_event
 
     def _url_slug(self):
+        if self.recurring:
+            return slugify(self.name)
         return slugify(f"{self.name}-{self.start_date.date().strftime('%d-%m-%Y')}")
 
     def url_path(self):
