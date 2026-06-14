@@ -64,7 +64,7 @@ class EventAdmin(admin.ModelAdmin):
 
     @display(boolean=True, ordering='description')
     def has_description(self, obj: Event):
-        return obj.description is not None
+        return len(obj.description) > 0
 
     @display(ordering='poster')
     def poster_link(self, obj: Event):
