@@ -1,8 +1,10 @@
 from time import timezone
 
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter, TabularInline
+from django.contrib.admin import SimpleListFilter, TabularInline, display
 from django.utils import timezone
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from main.models import Bar, Event, BarImage, SpecialDrink
 
@@ -54,8 +56,16 @@ class SpecialDrinkInline(TabularInline):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'bar')
+    list_display = ('name', 'start_date', 'has_description', 'poster_link', 'bar')
     ordering = ('-start_date',)
     list_filter = ('bar', FutureEventsFilter,)
     search_fields = ('name',)
     inlines = [SpecialDrinkInline]
+
+    @display(boolean=True, ordering='description')
+    def has_description(self, obj: Event):
+        return obj.description is not None
+
+    @display(ordering='poster')
+    def poster_link(self, obj: Event):
+        return format_html('<a href="{}">Poster</a>', obj.poster.url) if obj.poster else '-'
