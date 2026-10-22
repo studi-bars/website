@@ -61,6 +61,7 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('bar', FutureEventsFilter,)
     search_fields = ('name',)
     inlines = [SpecialDrinkInline]
+    save_as = True
 
     @display(boolean=True, ordering='description')
     def has_description(self, obj: Event):
