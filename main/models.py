@@ -2,7 +2,8 @@ from datetime import timedelta, datetime
 from os.path import splitext
 from zoneinfo import ZoneInfo
 
-from django.db.models.signals import post_save, post_delete
+from django.db import transaction
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -317,13 +318,8 @@ class Event(TimeStampedModel):
         return self.name
 
 
-@receiver(post_save, sender=Event)
-def event_saved(sender, instance, created, **kwargs):
-    channel_layer = get_channel_layer()
-    event_type = 'created' if created else 'updated'
-    from .serializers import EventSerializer
-    data = EventSerializer(instance).data
-    async_to_sync(channel_layer.group_send)(
+def _send_event_notification(event_type: str, data: dict):
+    async_to_sync(get_channel_layer().group_send)(
         CHANNEL_GROUP_NAME,
         {
             'type': 'event_notification',
@@ -335,21 +331,27 @@ def event_saved(sender, instance, created, **kwargs):
     )
 
 
-@receiver(post_delete, sender=Event)
+@receiver(post_save, sender=Event)
+def event_saved(sender, instance, created, **kwargs):
+    event_type = 'created' if created else 'updated'
+
+    def send():
+        from .serializers import EventSerializer
+        _send_event_notification(event_type, EventSerializer(instance).data)
+
+    # The admin saves the event before its special drinks (inlines), but inside one transaction.
+    # Serialize and send after the commit so that the special drinks are up-to-date.
+    # (Without a transaction on_commit runs the function immediately.)
+    transaction.on_commit(send)
+
+
+@receiver(pre_delete, sender=Event)
 def event_deleted(sender, instance, **kwargs):
-    channel_layer = get_channel_layer()
+    # Serialize in pre_delete, in post_delete the special drinks are already deleted
     from .serializers import EventSerializer
     data = EventSerializer(instance).data
-    async_to_sync(channel_layer.group_send)(
-        CHANNEL_GROUP_NAME,
-        {
-            'type': 'event_notification',
-            'event': {
-                'type': 'deleted',
-                'data': data
-            }
-        }
-    )
+    # Only send the notification if the deletion was successful
+    transaction.on_commit(lambda: _send_event_notification('deleted', data))
 
 
 class SpecialDrink(models.Model):
