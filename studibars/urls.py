@@ -20,7 +20,7 @@ from django.urls import path, re_path, include
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from main import views as main_views, urls as main_urls, views
+from main import views as main_views, urls as main_urls, views, asyncapi
 from studibars import settings
 
 router = routers.DefaultRouter()
@@ -36,6 +36,10 @@ urlpatterns = [
     path('api/schema.yaml', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    # AsyncAPI Schema (WebSocket):
+    path('api/asyncapi.yaml', asyncapi.asyncapi_schema_view, name='asyncapi-schema'),
+    path('api/asyncapi.json', asyncapi.asyncapi_schema_view, name='asyncapi-schema-json'),
+    path('api/ws-docs/', asyncapi.asyncapi_docs_view, name='asyncapi-docs'),
     re_path(r'^$', main_views.main_view, name='main'),
 ]
 

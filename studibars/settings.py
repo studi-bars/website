@@ -159,6 +159,18 @@ REST_FRAMEWORK = {
     ),
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Studibars API',
+    'DESCRIPTION': (
+        'REST API of studibars.\n\n'
+        '**Live updates:** Changes to events are pushed via WebSocket '
+        '(`/api/events/subscribe`, `/api/bar/{bar_id}/events/subscribe`). '
+        'See the [WebSocket API documentation](/api/ws-docs/) '
+        '([AsyncAPI schema](/api/asyncapi.yaml)).'
+    ),
+    'EXTERNAL_DOCS': {'description': 'WebSocket API (AsyncAPI)', 'url': '/api/ws-docs/'},
+}
+
 IMAGEKIT_DEFAULT_THUMBNAIL_FORMAT = "WEBP"
 IMAGEKIT_DEFAULT_THUMBNAIL_SRCSET_SCALES = [1.5, 2, 2.5, 3]
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Studibars WebSocket API</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@asyncapi/react-component@3.2.2/styles/default.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        }
+
+        /* Don't show literal backticks around `inline code` */
+        .aui-root .prose code::before, .aui-root .prose code::after {
+            content: none;
+        }
+    </style>
+</head>
+<body>
+<div class="aui-root" id="asyncapi"></div>
+<script src="https://cdn.jsdelivr.net/npm/@asyncapi/react-component@3.2.2/browser/standalone/index.js"></script>
+<script>
+    AsyncApiStandalone.render({
+        schema: {url: "{{ schema_url }}"},
+        config: {show: {sidebar: true}},
+    }, document.getElementById('asyncapi'));
+</script>
+</body>
+</html>
